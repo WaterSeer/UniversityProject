@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UniversityProgect.DataModel;
 
-namespace UniversityProgect.Models
+namespace UniversityProgect.Interfaces
 {
     public interface IStudentRepository
     {

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UniversityProgect.DataModel;
+using UniversityProgect.Interfaces;
 
 namespace UniversityProgect.Models
 {
