@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProgect.DataModel;
+using UniversityProgect.Models;
 
 namespace UniversityProgect
 {
@@ -24,7 +25,10 @@ namespace UniversityProgect
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddDbContext<UniversityContext>();
+            //services.AddTransient<IStudentRepository, FakeStudentRepository>();
+                services.AddTransient<IStudentRepository, EFStudentRepository>();
             services.AddControllersWithViews();
         }
 

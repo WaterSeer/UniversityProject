@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UniversityProgect.DataModel;
 using UniversityProgect.Models;
@@ -30,7 +32,14 @@ namespace UniversityProgect.Controllers
             return View(model);
         }
 
-        public IActionResult Privacy()
+        [HttpPost]       
+        public IActionResult Simple([FromBody] string value)
+        {
+            return View();
+        }
+
+
+            public IActionResult Privacy()
         {
             return View();
         }

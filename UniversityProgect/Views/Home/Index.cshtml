@@ -5,6 +5,30 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1>Simple Type</h1>
+    <select name="groupName"  form="form2">
+        @foreach  (var student in Model.Students)
+        {
+            <option>@student.FirstName</option>
+        }
+    </select>
+    
+    <form id="form2" method="post" action="home/simple">
+        <div>
+            <label for="status">Status</label>
+        </div>
+        <div>
+            <input id="status1" type="text" />
+        </div>
+        <div>
+            <input id="status1" type="text" />
+        </div>
+        <div>
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+    
+    
     <table>
         <tr>
             <th>First</th>

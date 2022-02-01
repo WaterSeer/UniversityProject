@@ -1,0 +1,10 @@
+﻿@using UniversityProgect.DataModel
+@model IEnumerable<Student>
+
+@foreach (var s in Model)
+{
+    <div>
+        <h6>@s.StudentId</h6>
+        <h6>@s.FirstName</h6>
+    </div>
+}
