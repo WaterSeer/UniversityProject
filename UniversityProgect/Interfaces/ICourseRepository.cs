@@ -6,7 +6,7 @@ using UniversityProgect.DataModel;
 
 namespace UniversityProgect.Interfaces
 {
-    interface ICoursesRepository
+    public interface ICourseRepository
     {
         IQueryable<Course> Courses { get; }
     }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProgect.DataModel;
+using UniversityProgect.Interfaces;
 using UniversityProgect.Models;
 
 namespace UniversityProgect
@@ -28,8 +29,12 @@ namespace UniversityProgect
             
             services.AddDbContext<UniversityContext>();
             //services.AddTransient<IStudentRepository, FakeStudentRepository>();
-                services.AddTransient<IStudentRepository, EFStudentRepository>();
+            services.AddTransient<IStudentRepository, EFStudentRepository>();
+            services.AddTransient<IGroupRepository, EFGroupRepository>();
+            services.AddTransient<ICourseRepository, EFCourseRepository>();
             services.AddControllersWithViews();
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

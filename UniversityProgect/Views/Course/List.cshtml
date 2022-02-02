@@ -1,0 +1,21 @@
+﻿@using UniversityProgect.DataModel
+@model CourseListViewModel
+
+@foreach (var c in Model.Courses)
+{
+    <div class="card m-1 p-1">
+        <div class="bg-info p-1">
+            <h4>
+                @c.Name                
+            </h4>
+        </div>  
+        <div class="card-text p-1">@c.Description</div>
+
+        <form id="@c.CourseId" asp-action="SelectCourse" asp-controller="SelectCourse" method="post">
+            <input type="hidden" asp-for="CourseId"/>
+             <input type="hidden" name = "returnUrl"/>
+            <button type="submit" class="btn btn-success btn-sm " style="float:right">Select</button>
+        </form>
+
+    </div>
+}

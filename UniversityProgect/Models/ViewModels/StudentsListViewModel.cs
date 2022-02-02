@@ -6,7 +6,7 @@ namespace UniversityProgect.Models.ViewModels
     public class StudentsListViewModel
     {
         public IEnumerable<Student> Students { get; set; }
-
-        public int Id {get;set;}
+        public PagingInfo PagingInfo { get; set; }
+        public string CurrentCategory { get;set; }
     }
 }

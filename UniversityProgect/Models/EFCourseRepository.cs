@@ -7,7 +7,7 @@ using UniversityProgect.Interfaces;
 
 namespace UniversityProgect.Models
 {
-    public class EFCourseRepository : ICoursesRepository
+    public class EFCourseRepository : ICourseRepository
     {
         private UniversityContext _context;
         public EFCourseRepository(UniversityContext context)

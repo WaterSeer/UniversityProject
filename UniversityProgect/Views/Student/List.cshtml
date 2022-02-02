@@ -1,10 +1,20 @@
 ﻿@using UniversityProgect.DataModel
-@model IEnumerable<Student>
+@model StudentsListViewModel
 
-@foreach (var s in Model)
+@foreach (var s in Model.Students)
 {
-    <div>
-        <h6>@s.StudentId</h6>
-        <h6>@s.FirstName</h6>
+    <div class="card m-1 p-1">
+        <div class="bg-info p-1">
+            <h4>
+                @s.LastName
+                <span class="badge badge-pill badge-primary" style="float:right">
+                    <small>@s.FirstName</small> 
+                </span>
+            </h4>
+        </div>  
+        <div class="card-text p-1">@s.LastName</div>
     </div>
 }
+
+<div page-model="@Model.PagingInfo" page-action="List" page-classes-enalbed="true" page-class="btn" page-class-normal="btn-secondary" page-class-selected="btn-primary"
+class="btn-group m-2"></div>

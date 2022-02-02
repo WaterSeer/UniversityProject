@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UniversityProgect.Controllers;
 using UniversityProgect.DataModel;
+using UniversityProgect.Interfaces;
 using UniversityProgect.Models;
+using UniversityProgect.Models.ViewModels;
 
 namespace TestUniversity
 {
@@ -13,6 +15,7 @@ namespace TestUniversity
                 
         
         [SetUp]
+        //тестирование разбиенмя на страницы
         public void Can_Paginate()
         {
             //setup
@@ -24,9 +27,9 @@ namespace TestUniversity
             }).AsQueryable());
             StudentController studentController = new StudentController(mock.Object);
             //act
-            IEnumerable<Student> result = studentController.List().ViewData.Model as IEnumerable<Student>;
-            //assert
-            Student[] studentArr = result.ToArray();
+            StudentsListViewModel result = studentController.List(null, 2).ViewData.Model as StudentsListViewModel;
+            //assert           
+            Student[] studentArr = result.Students.ToArray();
             Assert.True(studentArr.Length == 2);
             Assert.Equals("Tom", studentArr[0].FirstName);
             Assert.Equals("Sara", studentArr[1].FirstName);

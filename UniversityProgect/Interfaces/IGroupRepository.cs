@@ -6,7 +6,7 @@ using UniversityProgect.DataModel;
 
 namespace UniversityProgect.Interfaces
 {
-    interface IGroupRepository
+    public interface IGroupRepository
     {
         IQueryable<Group> Groups { get; }
     }
