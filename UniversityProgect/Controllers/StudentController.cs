@@ -16,11 +16,7 @@ namespace UniversityProgect.Controllers
         }
 
         public ViewResult List(string category, int productPage = 1)
-        {
-            //return View(_repository.Students.OrderBy(o => o.LastName)
-            //    .Skip((productPage - 1) * PageSize)
-            //    .Take(PageSize));
-
+        {            
             return View(new StudentsListViewModel
             {
                 Students = _repository.Students

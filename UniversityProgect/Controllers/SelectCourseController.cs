@@ -9,7 +9,7 @@ namespace UniversityProgect.Controllers
     public class SelectCourseController : Controller
     {
         private ICourseRepository _repository;
-        .
+        
         public SelectCourseController(ICourseRepository repository)
         {
             _repository = repository;

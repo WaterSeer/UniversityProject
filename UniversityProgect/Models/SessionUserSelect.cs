@@ -9,10 +9,10 @@ namespace UniversityProgect.Models
 {
     public class SessionUserSelect : SelectedStudents
     {
-        public static SelectedStudents GetSelect(IServiceProvider services)
-        {
-            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
-            SessionUserSelect sessionUserSelect = session?.Get
-        }
+        //public static SelectedStudents GetSelect(IServiceProvider services)
+        //{
+        //    //ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
+        //    //SessionUserSelect sessionUserSelect = session?.Get
+        //}
     }
 }
