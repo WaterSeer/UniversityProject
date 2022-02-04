@@ -15,5 +15,23 @@ namespace UniversityProgect.Models
             _context = context;
         }
         public IQueryable<Course> Courses => _context.Courses;
+
+        public void SaveCourse(Course course)
+        {
+            if (course.CourseId == 0)
+            {
+                _context.Courses.Add(course);
+            }
+            else
+            {
+                Course dbEntry = _context.Courses.FirstOrDefault(c => c.CourseId == course.CourseId);
+                if (dbEntry != null)
+                {
+                    dbEntry.Name = course.Name;
+                    dbEntry.Description = course.Description;
+                }
+            }
+            _context.SaveChanges();
+        }
     }
 }

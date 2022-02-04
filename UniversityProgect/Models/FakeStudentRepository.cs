@@ -5,7 +5,7 @@ using UniversityProgect.Interfaces;
 
 namespace UniversityProgect.Models
 {
-    public class FakeStudentRepository : IStudentRepository
+    public class FakeStudentRepository// : IStudentRepository
     {
         public IQueryable<Student> Students => new List<Student>
         {

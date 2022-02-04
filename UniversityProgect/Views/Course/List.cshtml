@@ -10,19 +10,17 @@
             </h4>
         </div>  
         <div class="card-text p-1">@course.Description</div>
-
+        <div>
         <form asp-action="Delete" method="post">
             <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-CourseId="@course.CourseId">Edit</a>
             <input type="hidden" name="CourseId" value="@course.CourseId"/>
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>            
         </form>
 
-
-        <form id="@course.CourseId" asp-action="SelectCourse" asp-controller="SelectCourse" method="post">
-            @*<input type="hidden" asp-for="courseId"/>*@
-             <input type="hidden" name = "returnUrl"/>
-            <button type="submit" class="btn btn-success btn-sm " style="float:right">Select</button>
+        <form id="@course.CourseId" asp-action="List" asp-controller="Group" asp-route-CourseId="@course.CourseId" method="post">  
+            <button type="submit" class="btn btn-success btn-sm" style="float:right">Select</button>
         </form>
+        </div>
 
     </div>
 }

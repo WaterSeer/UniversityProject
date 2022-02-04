@@ -1,18 +1,25 @@
 ﻿@using UniversityProgect.DataModel
 @model StudentsListViewModel
 
-@foreach (var s in Model.Students)
+@foreach (var student in Model.Students)
 {
     <div class="card m-1 p-1">
         <div class="bg-info p-1">
             <h4>
-                @s.LastName
-                <span class="badge badge-pill badge-primary" style="float:right">
-                    <small>@s.FirstName</small> 
-                </span>
+                @student.LastName                
             </h4>
+            <span class="badge badge-pill badge-primary" style="float:right">
+                    <small>@student.GroupId</small> 
+             </span>
         </div>  
-        <div class="card-text p-1">@s.LastName</div>
+        <div class="card-text p-1">@student.FirstName</div>
+
+
+         <form asp-action="Delete" method="post">
+            <a asp-controller="Student" asp-action="Edit" class="btn btn-sm btn-warning" asp-route-StudentId="@student.StudentId">Edit</a>
+            <input type="hidden" name="StudentId" value="@student.StudentId"/>
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>            
+        </form>
     </div>
 }
 

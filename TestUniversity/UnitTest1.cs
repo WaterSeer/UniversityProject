@@ -15,6 +15,8 @@ namespace TestUniversity
                 
         
         [SetUp]
+
+
         //тестирование разбиенмя на страницы
         public void Can_Paginate()
         {

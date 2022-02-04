@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using UniversityProgect.DataModel;
 using UniversityProgect.Interfaces;
 using UniversityProgect.Models.ViewModels;
 
@@ -20,17 +21,25 @@ namespace UniversityProgect.Controllers
             {
                 Courses = _repository.Courses
                 .OrderBy(o => o.CourseId)
-            });               
+            });
         }
-            
 
-        public IActionResult Index1()
-        {
-            return View();
-        }
         public ViewResult Edit(int courseId)
         {
             return View(_repository.Courses.FirstOrDefault(p => p.CourseId == courseId));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Course course)
+        {
+            if (ModelState.IsValid)
+            {
+                _repository.SaveCourse(course);
+                TempData["message"] = $"{course.Name} has been saved";
+                return RedirectToAction("List");
+            }
+            else
+                return View(course);
         }
 
     }

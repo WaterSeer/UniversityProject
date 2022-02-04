@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using UniversityProgect.DataModel;
 using UniversityProgect.Interfaces;
 using UniversityProgect.Models.ViewModels;
 
@@ -13,6 +14,21 @@ namespace UniversityProgect.Controllers
         public StudentController(IStudentRepository repository)
         {
             _repository = repository;
+        }
+
+        [HttpPost]
+        public ViewResult List(int groupId)
+        {
+            return View(new StudentsListViewModel
+            {
+                Students = _repository.Students.Where(S => S.GroupId == groupId),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = 1,
+                    ItemsPerPage = _repository.Students.Count(),
+                    TotalItems = _repository.Students.Count()
+                }
+            });
         }
 
         public ViewResult List(string category, int productPage = 1)
@@ -33,15 +49,23 @@ namespace UniversityProgect.Controllers
                 CurrentCategory = category
             });
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        private ViewResult Edit(int studentId)
+        
+        public ViewResult Edit(int studentId)
         {
             return View(_repository.Students.FirstOrDefault(s => s.StudentId == studentId));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Student student)
+        {
+            if(ModelState.IsValid)
+            {
+                _repository.SaveStudent(student);
+                TempData["message"] = $"{student.FirstName} {student.LastName} has been saved";
+                return RedirectToAction("List");
+            }
+            else
+                return View(student);
         }
     }
 }

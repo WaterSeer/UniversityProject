@@ -61,7 +61,7 @@ namespace UniversityProgect
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Student}/{action=List}/{id?}");
+                    pattern: "{controller=Course}/{action=List}/{id?}");
             });
         }
     }

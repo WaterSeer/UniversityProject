@@ -1,17 +1,25 @@
 ﻿@using UniversityProgect.DataModel
 @model GroupListViewModel
 
-@foreach (var g in Model.Groups)
+@foreach (var group in Model.Groups)
 {
     <div class="card m-1 p-1">
         <div class="bg-info p-1">
             <h4>
-                @g.Name
+                @group.Name
                 <span class="badge badge-pill badge-primary" style="float:right">
-                    <small>@g.Name</small> 
+                    <small>@group.Name</small> 
                 </span>
             </h4>
-        </div>  
-        <div class="card-text p-1">@g.Name</div>
+        </div> 
+        <form asp-action="Delete" method="post">
+            <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-GroupId="@group.GroupId">Edit</a>
+            <input type="hidden" name="GroupId" value="@group.GroupId"/>
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>            
+        </form>
+
+        <form id="@group.GroupId" asp-action="List" asp-controller="Student" asp-route-GroupId="@group.GroupId" method="post">
+            <button type="submit" class="btn btn-success btn-sm" style="float:right">Select</button>
+        </form>        
     </div>
 }

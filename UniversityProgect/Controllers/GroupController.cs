@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using UniversityProgect.DataModel;
 using UniversityProgect.Interfaces;
 using UniversityProgect.Models.ViewModels;
 
@@ -14,6 +15,15 @@ namespace UniversityProgect.Controllers
             _repository = repository;
         }
 
+        [HttpPost]
+        public ViewResult List(int courseId)
+        {
+            return View(new GroupListViewModel
+            {
+                Groups = _repository.Groups.Where(g => g.CourseId == courseId).OrderBy(o => o.GroupId)
+            });
+        }
+
         public ViewResult List()
         {
             return View(new GroupListViewModel
@@ -23,14 +33,22 @@ namespace UniversityProgect.Controllers
             });
         }
 
-        public IActionResult Index1()
+        public ViewResult Edit(int groupId)
         {
-            return View();
+            return View(_repository.Groups.FirstOrDefault(g => g.GroupId == groupId));
         }
 
-        public ViewResult Edit(int courseId)
+        [HttpPost]
+        public IActionResult Edit(Group group)
         {
-            return Viev(_repository.Groups.FirstOrDefault( g => g.CourseId == courseId));
+            if (ModelState.IsValid)
+            {
+                _repository.SaveGroup(group);
+                TempData["message"] = $"{group.Name} has been saved";
+                return RedirectToAction("List");
+            }
+            else
+                return View(group);
         }
     }
 }
