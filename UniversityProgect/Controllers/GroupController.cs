@@ -27,5 +27,10 @@ namespace UniversityProgect.Controllers
         {
             return View();
         }
+
+        public ViewResult Edit(int courseId)
+        {
+            return Viev(_repository.Groups.FirstOrDefault( g => g.CourseId == courseId));
+        }
     }
 }

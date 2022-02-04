@@ -9,5 +9,7 @@ namespace UniversityProgect.Interfaces
     public interface IGroupRepository
     {
         IQueryable<Group> Groups { get; }
+
+        void SaveGroup(Group group);
     }
 }

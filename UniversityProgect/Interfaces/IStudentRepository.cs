@@ -5,6 +5,8 @@ namespace UniversityProgect.Interfaces
 {
     public interface IStudentRepository
     {
-        IQueryable<Student> Students { get; }            
+        IQueryable<Student> Students { get; }     
+        
+        void SaveStudent(Student student);
     }
 }

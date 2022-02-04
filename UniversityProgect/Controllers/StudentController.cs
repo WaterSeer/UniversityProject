@@ -38,5 +38,10 @@ namespace UniversityProgect.Controllers
         {
             return View();
         }
+
+        private ViewResult Edit(int studentId)
+        {
+            return View(_repository.Students.FirstOrDefault(s => s.StudentId == studentId));
+        }
     }
 }

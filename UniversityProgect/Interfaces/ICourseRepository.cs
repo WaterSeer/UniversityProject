@@ -9,5 +9,7 @@ namespace UniversityProgect.Interfaces
     public interface ICourseRepository
     {
         IQueryable<Course> Courses { get; }
-    }
+
+        void SaveCourse(Course course);
+    }    
 }
