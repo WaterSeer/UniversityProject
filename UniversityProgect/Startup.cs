@@ -27,8 +27,7 @@ namespace UniversityProgect
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<UniversityContext>();
-            //services.AddTransient<IStudentRepository, FakeStudentRepository>();
+            services.AddDbContext<UniversityContext>();            
             services.AddTransient<IStudentRepository, EFStudentRepository>();
             services.AddTransient<IGroupRepository, EFGroupRepository>();
             services.AddTransient<ICourseRepository, EFCourseRepository>();
@@ -50,7 +49,9 @@ namespace UniversityProgect
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();

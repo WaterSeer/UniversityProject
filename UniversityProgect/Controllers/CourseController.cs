@@ -20,7 +20,6 @@ namespace UniversityProgect.Controllers
             return View(new CourseListViewModel
             {
                 Courses = _repository.Courses
-                .OrderBy(o => o.CourseId)
             });
         }
 

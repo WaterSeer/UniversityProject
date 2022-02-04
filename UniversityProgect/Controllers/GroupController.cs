@@ -20,7 +20,7 @@ namespace UniversityProgect.Controllers
         {
             return View(new GroupListViewModel
             {
-                Groups = _repository.Groups.Where(g => g.CourseId == courseId).OrderBy(o => o.GroupId)
+                Groups = _repository.Groups.Where(g => g.CourseId == courseId)
             });
         }
 
