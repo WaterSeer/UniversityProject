@@ -8,5 +8,7 @@ namespace UniversityProgect.Interfaces
         IQueryable<Student> Students { get; }     
         
         void SaveStudent(Student student);
+
+        Student DeleteStudent(int studentId);
     }
 }

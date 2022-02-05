@@ -16,6 +16,17 @@ namespace UniversityProgect.Models
         }
         public IQueryable<Group> Groups => _context.Groups;
 
+        public Group DeleteGroup(int groupId)
+        {
+            Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == groupId);
+            if(dbEntry != null  )
+            {
+                _context.Groups.Remove(dbEntry);
+                _context.SaveChanges();
+            }
+            return dbEntry;
+        }
+
         public void SaveGroup(Group group)
         {
             if (group.GroupId == 0)

@@ -11,5 +11,7 @@ namespace UniversityProgect.Interfaces
         IQueryable<Course> Courses { get; }
 
         void SaveCourse(Course course);
+
+        Course DeleteCourse(int courseId);
     }    
 }

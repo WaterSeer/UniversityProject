@@ -12,7 +12,6 @@ namespace TestUniversity
 {
     public class Tests
     {
-
         StudentController _studentController;
         CourseController _courseController;
         GroupController _groupController;
@@ -20,6 +19,9 @@ namespace TestUniversity
         Mock<ICourseRepository> _courseMock;
         Mock<IGroupRepository> _groupMock;
         Mock<ITempDataDictionary> _tempDataMock;
+        Student _student;
+        Course _course;
+        Group _group;
 
         [SetUp]
         public void SetUp()
@@ -27,11 +29,12 @@ namespace TestUniversity
             _tempDataMock = new Mock<ITempDataDictionary>();
 
             _studentMock = new Mock<IStudentRepository>();
+            _student = new Student { StudentId = 2, FirstName = "Sara", LastName = "Dower", GroupId = 2 };
             _studentMock.Setup(m => m.Students).Returns((new Student[]
             {
                 new Student { StudentId = 1, FirstName = "Tom", LastName = "Smith", GroupId = 1 },
-                new Student { StudentId = 2, FirstName = "Sara", LastName = "Dower", GroupId = 2},
-                new Student { StudentId = 3, FirstName = "John", LastName = "Archer", GroupId = 1}
+                _student,
+                new Student { StudentId = 3, FirstName = "John", LastName = "Archer", GroupId = 1 }
             }).AsQueryable());
             _studentController = new StudentController(_studentMock.Object)
             {
@@ -39,9 +42,10 @@ namespace TestUniversity
             };
 
             _courseMock = new Mock<ICourseRepository>();
+            _course = new Course { CourseId = 2, Name = "course2", Description = "BBDescription" };
             _courseMock.Setup(c => c.Courses).Returns((new Course[] {
                 new Course { CourseId = 1, Name = "course1", Description = "AADescription" },
-                new Course { CourseId = 2, Name = "course2", Description = "BBDescription" },
+                _course,
                 new Course { CourseId = 3, Name = "course3", Description = "CCDescription" }
             }).AsQueryable());
             _courseController = new CourseController(_courseMock.Object)
@@ -50,9 +54,10 @@ namespace TestUniversity
             };
 
             _groupMock = new Mock<IGroupRepository>();
+            _group = new Group { GroupId = 2, Name = "group2", CourseId = 2 };
             _groupMock.Setup(m => m.Groups).Returns((new Group[] {
                 new Group{GroupId = 1, Name = "group1", CourseId = 1},
-                new Group{GroupId = 2, Name = "group2", CourseId = 2},
+                _group,
                 new Group{GroupId = 3, Name = "group3", CourseId = 1}
             }).AsQueryable());
             _groupController = new GroupController(_groupMock.Object)
@@ -78,13 +83,14 @@ namespace TestUniversity
         /// <summary>
         /// Student Controller
         /// </summary>
+        /// 
+
         [Test]
         public void CanFilterStudents()
-        {                      
-            Student[] result = _studentController.List(1).ViewData.Model as Student[];
-            Assert.True(result.Length == 2);
-            Assert.True(result[0].FirstName == "Tom" && result[0].LastName == "Smith");
-            Assert.True(result[1].FirstName == "John" && result[1].LastName == "Archer");
+        {
+            StudentsListViewModel result = _studentController.List(1).ViewData.Model as StudentsListViewModel;
+            Assert.True(result.Students.Count() == 2);
+            Assert.True(result.Students.First().FirstName == "Tom" && result.Students.First().LastName == "Smith");
         }
 
         [Test]
@@ -119,9 +125,19 @@ namespace TestUniversity
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
+        [Test]
+        public void CanDeleteValidStudent()
+        {
+            _studentController.DeleteStudent(2);
+            _studentMock.Verify(s => s.DeleteStudent((int)_student.StudentId));
+        }
+
+
         /// <summary>
         /// CourseController
         /// </summary>
+        /// 
+
         [Test]
         public void CanSaveCourseValidChanges()
         {
@@ -136,6 +152,7 @@ namespace TestUniversity
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
         }
+
         [Test]
         public void CannotSaveCourseInvalidChanges()
         {
@@ -150,6 +167,14 @@ namespace TestUniversity
             _courseMock.Verify(m => m.SaveCourse(It.IsAny<Course>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }
+
+        [Test]
+        public void CanDeleteValidCourse()
+        {
+            _courseController.DeleteCourse(2);
+            _courseMock.Verify(s => s.DeleteCourse((int)_course.CourseId));
+        }
+        
         /// <summary>
         /// Group Controller
         /// </summary>
@@ -157,13 +182,10 @@ namespace TestUniversity
         [Test]
         public void CanFilterGroups()
         {
-            Group[] result = _groupController.List(1).ViewData.Model as Group[];
-            Assert.True(result.Length == 2);
-            Assert.True(result[0].Name == "group1");
-            Assert.True(result[1].Name == "group3");
+            GroupListViewModel result = _groupController.List(1).ViewData.Model as GroupListViewModel;
+            Assert.True(result.Groups.Count() == 2);
+            Assert.True(result.Groups.First().Name == "group1");
         }
-
-
 
         [Test]
         public void CanSaveGroupValidChanges()
@@ -190,6 +212,13 @@ namespace TestUniversity
             IActionResult result = _groupController.Edit(group);
             _groupMock.Verify(m => m.SaveGroup(It.IsAny<Group>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
+        }
+
+        [Test]
+        public void CanDeleteValidGroup()
+        {
+            _groupController.DeleteGroup(2);
+            _groupMock.Verify(s => s.DeleteGroup((int)_group.GroupId));
         }
     }
 }

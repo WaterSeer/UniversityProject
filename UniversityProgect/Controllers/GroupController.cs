@@ -50,5 +50,16 @@ namespace UniversityProgect.Controllers
             else
                 return View(group);
         }
+
+        [HttpPost]
+        public IActionResult DeleteGroup(int groupId)
+        {
+            Group deleteGroup = _repository.DeleteGroup(groupId);
+            if(deleteGroup != null)
+            {
+                TempData["message"] = $"{deleteGroup.Name} has deleted";
+            }
+            return RedirectToAction("List");
+        }
     }
 }

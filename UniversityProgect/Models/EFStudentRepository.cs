@@ -13,6 +13,17 @@ namespace UniversityProgect.Models
         }
         public IQueryable<Student> Students => _context.Students;
 
+        public Student DeleteStudent(int studentId)
+        {            
+            Student dbEntry = _context.Students.FirstOrDefault(s => s.StudentId == studentId);
+            if (dbEntry != null)
+            {
+                _context.Students.Remove(dbEntry);
+                _context.SaveChanges();
+            }
+            return dbEntry;
+        }
+
         public void SaveStudent(Student student)
         {
             if (student.StudentId == 0)

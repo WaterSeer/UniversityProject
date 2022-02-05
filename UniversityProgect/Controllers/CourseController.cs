@@ -41,5 +41,16 @@ namespace UniversityProgect.Controllers
                 return View(course);
         }
 
+        [HttpPost]
+        public IActionResult DeleteCourse(int courseId)
+        {
+            Course deleteCourse = _repository.DeleteCourse(courseId);
+            if(deleteCourse != null)
+            {
+                TempData["message"] = $"{deleteCourse.Name} was deleted";
+            }
+            return RedirectToAction("List");
+        }
+
     }
 }

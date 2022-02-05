@@ -11,5 +11,7 @@ namespace UniversityProgect.Interfaces
         IQueryable<Group> Groups { get; }
 
         void SaveGroup(Group group);
+
+        Group DeleteGroup(int groupId);
     }
 }

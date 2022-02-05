@@ -16,6 +16,17 @@ namespace UniversityProgect.Models
         }
         public IQueryable<Course> Courses => _context.Courses;
 
+        public Course DeleteCourse(int courseId)
+        {
+            Course dbEntry = _context.Courses.FirstOrDefault(c => c.CourseId == courseId);
+            if(dbEntry != null)
+            {
+                _context.Courses.Remove(dbEntry);
+                _context.SaveChanges();
+            }
+            return dbEntry;
+        }
+
         public void SaveCourse(Course course)
         {
             if (course.CourseId == 0)

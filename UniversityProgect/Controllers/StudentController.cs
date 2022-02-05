@@ -67,5 +67,16 @@ namespace UniversityProgect.Controllers
             else
                 return View(student);
         }
+
+        [HttpPost]
+        public IActionResult DeleteStudent(int studentId)
+        {
+            Student deleteStudent = _repository.DeleteStudent(studentId);
+            if (deleteStudent != null)
+            {
+                TempData["message"] = $"{deleteStudent.FirstName} {deleteStudent.LastName} was deleted";                
+            }
+            return RedirectToAction("List");
+        }
     }
 }
