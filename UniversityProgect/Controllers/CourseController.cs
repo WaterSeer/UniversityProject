@@ -45,7 +45,7 @@ namespace UniversityProgect.Controllers
         public IActionResult DeleteCourse(int courseId)
         {
             Course deleteCourse = _repository.DeleteCourse(courseId);
-            if(deleteCourse != null)
+            if (deleteCourse != null)
             {
                 TempData["message"] = $"{deleteCourse.Name} was deleted";
             }

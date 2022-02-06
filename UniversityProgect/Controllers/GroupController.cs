@@ -10,9 +10,12 @@ namespace UniversityProgect.Controllers
     {
         private IGroupRepository _repository;
 
-        public GroupController(IGroupRepository repository)
+        private IStudentRepository _studentRepository;
+
+        public GroupController(IGroupRepository repository, IStudentRepository studentRepository)
         {
             _repository = repository;
+            _studentRepository = studentRepository;
         }
 
         [HttpPost]
@@ -54,8 +57,14 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteGroup(int groupId)
         {
+            if(_studentRepository.Students.FirstOrDefault(s => s.GroupId ==groupId) != null)
+            {
+                TempData["message"] = $"This group cannot be deleted";
+                return RedirectToAction("List");
+            }
+            
             Group deleteGroup = _repository.DeleteGroup(groupId);
-            if(deleteGroup != null)
+            if (deleteGroup != null)
             {
                 TempData["message"] = $"{deleteGroup.Name} has deleted";
             }

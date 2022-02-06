@@ -21,7 +21,7 @@ namespace TestUniversity
         Mock<ITempDataDictionary> _tempDataMock;
         Student _student;
         Course _course;
-        Group _group;
+        Group _groupForDelete;
 
         [SetUp]
         public void SetUp()
@@ -54,13 +54,14 @@ namespace TestUniversity
             };
 
             _groupMock = new Mock<IGroupRepository>();
-            _group = new Group { GroupId = 2, Name = "group2", CourseId = 2 };
+            _groupForDelete = new Group { GroupId = 3, Name = "group2", CourseId = 2 };
+            
             _groupMock.Setup(m => m.Groups).Returns((new Group[] {
                 new Group{GroupId = 1, Name = "group1", CourseId = 1},
-                _group,
-                new Group{GroupId = 3, Name = "group3", CourseId = 1}
+                _groupForDelete,
+                new Group{GroupId = 2, Name = "group3", CourseId = 1}
             }).AsQueryable());
-            _groupController = new GroupController(_groupMock.Object)
+            _groupController = new GroupController(_groupMock.Object, _studentMock.Object)
             {
                 TempData = _tempDataMock.Object
             };
@@ -70,13 +71,10 @@ namespace TestUniversity
         //тестирование разбиенмя на страницы
         public void Can_Paginate()
         {
-            //act
+            _studentController.PageSize = 2;
             StudentsListViewModel result = _studentController.List(null, 2).ViewData.Model as StudentsListViewModel;
-            //assert           
-            Student[] studentArr = result.Students.ToArray();
-            Assert.True(studentArr.Length == 2);
-            Assert.Equals("Tom", studentArr[0].FirstName);
-            Assert.Equals("Sara", studentArr[1].FirstName);
+            Assert.True(result.Students.Count() == 1);
+            Assert.AreEqual("John", result.Students.First().FirstName);            
         }
 
 
@@ -217,8 +215,8 @@ namespace TestUniversity
         [Test]
         public void CanDeleteValidGroup()
         {
-            _groupController.DeleteGroup(2);
-            _groupMock.Verify(s => s.DeleteGroup((int)_group.GroupId));
+            _groupController.DeleteGroup(3);
+            _groupMock.Verify(s => s.DeleteGroup((int)_groupForDelete.GroupId));
         }
     }
 }
