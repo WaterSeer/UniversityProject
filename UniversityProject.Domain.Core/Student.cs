@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-#nullable disable
-
-namespace UniversityProgect.DataModel
+namespace UniversityProject.Domain.Core
 {
     [Table("STUDENTS")]
     public partial class Student

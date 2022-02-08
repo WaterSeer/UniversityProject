@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UniversityProgect.DataModel;
+using UniversityProject.Domain.Core;
 
-namespace UniversityProgect.Interfaces
+namespace UniversityProject.Domain.Interfaces
 {
     public interface ICourseRepository
     {
@@ -13,5 +11,5 @@ namespace UniversityProgect.Interfaces
         void SaveCourse(Course course);
 
         Course DeleteCourse(int courseId);
-    }    
+    }
 }
