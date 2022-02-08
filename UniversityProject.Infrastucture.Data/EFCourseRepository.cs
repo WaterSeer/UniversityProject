@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UniversityProgect.DataModel;
-using UniversityProgect.Interfaces;
+using UniversityProject.Domain.Core;
+using UniversityProject.Domain.Interfaces;
 
-namespace UniversityProgect.Models
+namespace UniversityProject.Infrastucture.Data
 {
     public class EFCourseRepository : ICourseRepository
     {
@@ -19,7 +17,7 @@ namespace UniversityProgect.Models
         public Course DeleteCourse(int courseId)
         {
             Course dbEntry = _context.Courses.FirstOrDefault(c => c.CourseId == courseId);
-            if(dbEntry != null)
+            if (dbEntry != null)
             {
                 _context.Courses.Remove(dbEntry);
                 _context.SaveChanges();

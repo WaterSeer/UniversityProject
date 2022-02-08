@@ -4,9 +4,9 @@ using Moq;
 using NUnit.Framework;
 using System.Linq;
 using UniversityProgect.Controllers;
-using UniversityProgect.DataModel;
-using UniversityProgect.Interfaces;
 using UniversityProgect.Models.ViewModels;
+using UniversityProject.Domain.Core;
+using UniversityProject.Domain.Interfaces;
 
 namespace TestUniversity
 {

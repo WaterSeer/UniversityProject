@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using UniversityProgect.DataModel;
+using UniversityProject.Domain.Core;
 
-namespace UniversityProgect.Interfaces
+namespace UniversityProject.Domain.Interfaces
 {
     public interface IGroupRepository
     {
