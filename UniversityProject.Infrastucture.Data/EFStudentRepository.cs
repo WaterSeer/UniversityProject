@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using UniversityProgect.DataModel;
-using UniversityProgect.Interfaces;
+﻿using System;
+using System.Linq;
+using UniversityProject.Domain.Core;
+using UniversityProject.Domain.Interfaces;
 
-namespace UniversityProgect.Models
+namespace UniversityProject.Infrastucture.Data
 {
     public class EFStudentRepository : IStudentRepository
     {
@@ -14,7 +15,7 @@ namespace UniversityProgect.Models
         public IQueryable<Student> Students => _context.Students;
 
         public Student DeleteStudent(int studentId)
-        {            
+        {
             Student dbEntry = _context.Students.FirstOrDefault(s => s.StudentId == studentId);
             if (dbEntry != null)
             {
@@ -27,7 +28,7 @@ namespace UniversityProgect.Models
         public void SaveStudent(Student student)
         {
             if (student.StudentId == 0)
-            { 
+            {
                 _context.Students.Add(student);
             }
             else

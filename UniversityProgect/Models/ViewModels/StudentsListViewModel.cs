@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UniversityProgect.DataModel;
+using UniversityProject.Domain.Core;
 
 namespace UniversityProgect.Models.ViewModels
 {

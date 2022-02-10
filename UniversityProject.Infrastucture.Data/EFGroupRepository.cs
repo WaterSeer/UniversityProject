@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using UniversityProgect.DataModel;
-using UniversityProgect.Interfaces;
+using UniversityProject.Domain.Core;
+using UniversityProject.Domain.Interfaces;
 
-namespace UniversityProgect.Models
+namespace UniversityProject.Infrastucture.Data
 {
     public class EFGroupRepository : IGroupRepository
     {
@@ -19,7 +17,7 @@ namespace UniversityProgect.Models
         public Group DeleteGroup(int groupId)
         {
             Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == groupId);
-            if(dbEntry != null  )
+            if (dbEntry != null)
             {
                 _context.Groups.Remove(dbEntry);
                 _context.SaveChanges();
@@ -35,8 +33,8 @@ namespace UniversityProgect.Models
             }
             else
             {
-                Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == group.GroupId);    
-                if(dbEntry != null)
+                Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == group.GroupId);
+                if (dbEntry != null)
                 {
                     dbEntry.Name = group.Name;
                 }

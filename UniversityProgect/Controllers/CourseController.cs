@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using UniversityProgect.DataModel;
-using UniversityProgect.Interfaces;
 using UniversityProgect.Models.ViewModels;
+using UniversityProject.Domain.Core;
+using UniversityProject.Domain.Interfaces;
 
 namespace UniversityProgect.Controllers
 {
