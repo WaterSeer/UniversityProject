@@ -13,6 +13,6 @@ namespace UniversityProject.Domain.Interfaces
 
         void SaveStudent(Student student);
 
-        Student DeleteStudent(int studentId);
+        Student DeleteStudent(Student);
     }
 }
