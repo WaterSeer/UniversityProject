@@ -3,17 +3,20 @@ using System.Linq;
 using UniversityProgect.Models.ViewModels;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
+using UniversityProject.Services.Infrastructure;
+using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
 {
     public class StudentController : Controller
     {
+        private IStudentService _servise;
         private IStudentRepository _repository;
         public int PageSize = 10;
 
-        public StudentController(IStudentRepository repository)
+        public StudentController(IStudentService service)
         {
-            _repository = repository;
+            _servise = service;
         }
 
         [HttpPost]

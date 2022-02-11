@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversityProgect", "UniversityProgect\UniversityProgect.csproj", "{32BABB3E-BB0B-487E-8C1C-9AE5A0DC48CA}"
 EndProject
@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastucture", "Infrastuct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversityProject.Infrastucture.Data", "UniversityProject.Infrastucture.Data\UniversityProject.Infrastucture.Data.csproj", "{0EA88050-41E6-4409-AA18-D4FAFBAF1EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityProject.Services.Infrastructure", "UniversityProject.Services.Infrastructure\UniversityProject.Services.Infrastructure.csproj", "{9BEBBDFF-C0B3-4E48-88E4-E37369D62FD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniversityProject.Services.Infrastructure", "UniversityProject.Services.Infrastructure\UniversityProject.Services.Infrastructure.csproj", "{9BEBBDFF-C0B3-4E48-88E4-E37369D62FD3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
