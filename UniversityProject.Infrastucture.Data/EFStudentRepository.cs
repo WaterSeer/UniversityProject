@@ -1,20 +1,23 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 
 namespace UniversityProject.Infrastucture.Data
 {
-    public class EFStudentRepository : IStudentRepository
+    public class EFStudentRepository : IRepository<Student>
     {
         private UniversityContext _context;
         public EFStudentRepository(UniversityContext context)
         {
             _context = context;
         }
-        public IQueryable<Student> Students => _context.Students;
+        public IQueryable<Student> GetAll() => _context.Students;
 
-        public Student DeleteStudent(int studentId)
+        public Student Get(int id)
+        {
+            return _context.Students.FirstOrDefault(s => s.StudentId == id);
+        }
+        public Student Delete(int studentId)
         {
             Student dbEntry = _context.Students.FirstOrDefault(s => s.StudentId == studentId);
             if (dbEntry != null)
@@ -25,7 +28,7 @@ namespace UniversityProject.Infrastucture.Data
             return dbEntry;
         }
 
-        public void SaveStudent(Student student)
+        public void Update(Student student)
         {
             if (student.StudentId == 0)
             {
@@ -40,6 +43,11 @@ namespace UniversityProject.Infrastucture.Data
                     dbEntry.FirstName = student.LastName;
                 }
             }
+            _context.SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
     }

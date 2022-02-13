@@ -1,20 +1,24 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 
 namespace UniversityProject.Infrastucture.Data
 {
-    public class EFCourseRepository : ICourseRepository
+    public class EFCourseRepository : IRepository<Course>
     {
         private UniversityContext _context;
         public EFCourseRepository(UniversityContext context)
         {
             _context = context;
         }
-        public IQueryable<Course> Courses => _context.Courses;
+        public IQueryable<Course> GetAll() => _context.Courses;
 
-        public Course DeleteCourse(int courseId)
+        public Course Get(int id)
+        {
+            return _context.Courses.FirstOrDefault(c => c.CourseId == id);
+        }
+
+        public Course Delete(int courseId)
         {
             Course dbEntry = _context.Courses.FirstOrDefault(c => c.CourseId == courseId);
             if (dbEntry != null)
@@ -25,7 +29,7 @@ namespace UniversityProject.Infrastucture.Data
             return dbEntry;
         }
 
-        public void SaveCourse(Course course)
+        public void Update(Course course)
         {
             if (course.CourseId == 0)
             {
@@ -40,6 +44,11 @@ namespace UniversityProject.Infrastucture.Data
                     dbEntry.Description = course.Description;
                 }
             }
+            _context.SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
     }

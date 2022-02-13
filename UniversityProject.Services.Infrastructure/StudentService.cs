@@ -5,16 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
-using UniversityProject.Infrastucture.Data.Data;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProject.Services.Infrastructure
 {
-    public class StudentService : IStudentService
+    public class StudentService : Interfaces.IStudentService
     {
         private readonly IRepository<Student> _studentRepository;
-                
-        public IStudentRepository StudentRepository { get; }
+              
 
         public StudentService(IRepository<Student> studentRepository)
         {
@@ -36,11 +34,12 @@ namespace UniversityProject.Services.Infrastructure
             _studentRepository.Update(student);
         }
 
-        public void DeleteStudent(int id)
+        public Student DeleteStudent(int id)
         {
             var student = _studentRepository.Get(id);
-            _studentRepository.Delete(student);
-            _studentRepository.SaveChange();
+            _studentRepository.Delete(id);
+            _studentRepository.SaveChanges();
+            return student;
         }
 
         

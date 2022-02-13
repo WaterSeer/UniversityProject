@@ -7,11 +7,14 @@ using UniversityProject.Domain.Core;
 
 namespace UniversityProject.Services.Infrastructure.Interfaces
 {
-    public interface IStudentService
+    public interface ICourseService
     {
-        IEnumerable<Student> GetStudents();
-        Student GetStudent(int id);
-        void UpdateStudent(Student student);
-        Student DeleteStudent(int id);
+        IEnumerable<Course> GetCourses();
+
+        Course GetCourse(int id);
+
+        void UpdateCourse(Course course);
+
+        Course DeleteCourse(int id);
     }
 }

@@ -7,11 +7,15 @@ using UniversityProject.Domain.Core;
 
 namespace UniversityProject.Services.Infrastructure.Interfaces
 {
-    public interface IStudentService
+    public interface IGroupService
     {
-        IEnumerable<Student> GetStudents();
-        Student GetStudent(int id);
-        void UpdateStudent(Student student);
-        Student DeleteStudent(int id);
+        IEnumerable<Group> GetGroups();
+
+        Group GetGroup(int id);
+
+        void UpdateGroup(Group group);
+
+        Group DeleteGroup(int id);
+
     }
 }

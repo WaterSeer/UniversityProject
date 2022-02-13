@@ -1,20 +1,24 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 
 namespace UniversityProject.Infrastucture.Data
 {
-    public class EFGroupRepository : IGroupRepository
+    public class EFGroupRepository : IRepository<Group>
     {
         private UniversityContext _context;
         public EFGroupRepository(UniversityContext context)
         {
             _context = context;
         }
-        public IQueryable<Group> Groups => _context.Groups;
+        public IQueryable<Group> GetAll() => _context.Groups;
 
-        public Group DeleteGroup(int groupId)
+
+        public Group Get(int id)
+        {
+            return _context.Groups.FirstOrDefault(g => g.GroupId == id);
+        }
+        public Group Delete(int groupId)
         {
             Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == groupId);
             if (dbEntry != null)
@@ -25,7 +29,7 @@ namespace UniversityProject.Infrastucture.Data
             return dbEntry;
         }
 
-        public void SaveGroup(Group group)
+        public void Update(Group group)
         {
             if (group.GroupId == 0)
             {
@@ -39,6 +43,11 @@ namespace UniversityProject.Infrastucture.Data
                     dbEntry.Name = group.Name;
                 }
             }
+            _context.SaveChanges();
+        }
+
+        public void SaveChanges()
+        {
             _context.SaveChanges();
         }
     }

@@ -2,30 +2,31 @@
 using System.Linq;
 using UniversityProgect.Models.ViewModels;
 using UniversityProject.Domain.Core;
-using UniversityProject.Domain.Interfaces;
+using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
 {
     public class CourseController : Controller
     {
-        private ICourseRepository _repository;
+        private ICourseService _service;
 
-        public CourseController(ICourseRepository repository)
+        public CourseController(ICourseService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         public ViewResult List()
         {
             return View(new CourseListViewModel
             {
-                Courses = _repository.Courses
+                Courses = _service.GetCourses()
             });
+
         }
 
         public ViewResult Edit(int courseId)
         {
-            return View(_repository.Courses.FirstOrDefault(p => p.CourseId == courseId));
+            return View(_service.GetCourses().FirstOrDefault(p => p.CourseId == courseId));
         }
 
         [HttpPost]
@@ -33,7 +34,7 @@ namespace UniversityProgect.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.SaveCourse(course);
+                _service.UpdateCourse(course);
                 TempData["message"] = $"{course.Name} has been saved";
                 return RedirectToAction("List");
             }
@@ -44,7 +45,7 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course deleteCourse = _repository.DeleteCourse(courseId);
+            Course deleteCourse = _service.DeleteCourse(courseId);
             if (deleteCourse != null)
             {
                 TempData["message"] = $"{deleteCourse.Name} was deleted";
