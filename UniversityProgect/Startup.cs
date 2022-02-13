@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProgect.Models;
+using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 using UniversityProject.Infrastucture.Data;
+using UniversityProject.Services.Infrastructure;
+using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect
 {
@@ -27,10 +30,13 @@ namespace UniversityProgect
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<UniversityContext>();            
-            services.AddTransient<IStudentRepository, EFStudentRepository>();
-            services.AddTransient<IGroupRepository, EFGroupRepository>();
-            services.AddTransient<ICourseRepository, EFCourseRepository>();
+            services.AddDbContext<UniversityContext>();
+            services.AddTransient<IRepository<Student>, EFStudentRepository>();
+            services.AddTransient<IRepository<Group>, EFGroupRepository>();
+            services.AddTransient<IRepository<Course>, EFCourseRepository>();
+            services.AddTransient<IStudentService, StudentService>();
+            services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<IGroupService, GroupService>();
             services.AddControllersWithViews();
             services.AddMemoryCache();
             services.AddSession();

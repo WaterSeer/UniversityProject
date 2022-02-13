@@ -2,20 +2,20 @@
 using System.Linq;
 using UniversityProgect.Models.ViewModels;
 using UniversityProject.Domain.Core;
-using UniversityProject.Domain.Interfaces;
+using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
 {
     public class GroupController : Controller
     {
-        private IGroupRepository _repository;
+        private IGroupService _groupService;
 
-        private IStudentRepository _studentRepository;
+        private IStudentService _studentService;
 
-        public GroupController(IGroupRepository repository, IStudentRepository studentRepository)
+        public GroupController(IGroupService groupService, IStudentService studentService)
         {
-            _repository = repository;
-            _studentRepository = studentRepository;
+            _groupService = groupService;
+            _studentService = studentService;
         }
 
         [HttpPost]
@@ -23,7 +23,7 @@ namespace UniversityProgect.Controllers
         {
             return View(new GroupListViewModel
             {
-                Groups = _repository.Groups.Where(g => g.CourseId == courseId)
+                Groups = _groupService.GetGroups().Where(g => g.CourseId == courseId)
             });
         }
 
@@ -31,14 +31,14 @@ namespace UniversityProgect.Controllers
         {
             return View(new GroupListViewModel
             {
-                Groups = _repository.Groups
+                Groups = _groupService.GetGroups()
                 .OrderBy(o => o.GroupId)
             });
         }
 
         public ViewResult Edit(int groupId)
         {
-            return View(_repository.Groups.FirstOrDefault(g => g.GroupId == groupId));
+            return View(_groupService.GetGroups().FirstOrDefault(g => g.GroupId == groupId));
         }
 
         [HttpPost]
@@ -46,7 +46,7 @@ namespace UniversityProgect.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.SaveGroup(group);
+                _groupService.UpdateGroup(group);
                 TempData["message"] = $"{group.Name} has been saved";
                 return RedirectToAction("List");
             }
@@ -57,13 +57,13 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteGroup(int groupId)
         {
-            if(_studentRepository.Students.FirstOrDefault(s => s.GroupId ==groupId) != null)
+            if (_studentService.GetStudents().FirstOrDefault(s => s.GroupId == groupId) != null)
             {
                 TempData["message"] = $"This group cannot be deleted";
                 return RedirectToAction("List");
             }
-            
-            Group deleteGroup = _repository.DeleteGroup(groupId);
+
+            Group deleteGroup = _groupService.DeleteGroup(groupId);
             if (deleteGroup != null)
             {
                 TempData["message"] = $"{deleteGroup.Name} has deleted";
