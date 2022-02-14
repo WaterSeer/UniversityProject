@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
+using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProject.Services.Infrastructure
@@ -16,27 +18,47 @@ namespace UniversityProject.Services.Infrastructure
             _groupRepository = groupRepository;
         }
 
-        public Group DeleteGroup(int id)
+        public GroupDto DeleteGroup(int id)
         {
             var group = _groupRepository.Get(id);
             _groupRepository.Delete(id);
             _groupRepository.SaveChanges();
-            return group;
+            return new GroupDto()
+            {
+                GroupId = group.GroupId,
+                Name = group.Name,
+                //todo
+            };
         }
 
-        public Group GetGroup(int id)
+        public GroupDto GetGroup(int id)
         {
-            return _groupRepository.Get(id);
+            var group = _groupRepository.Get(id);
+            return new GroupDto()
+            {
+                GroupId = group.GroupId,
+                Name = group.Name,
+                //todo
+            };
         }
 
-        public IEnumerable<Group> GetGroups()
+        public IEnumerable<GroupDto> GetGroups()
         {
-            return _groupRepository.GetAll();
+            var groups = _groupRepository.GetAll();
+            var groupsDto = groups
+                .Select(group => new GroupDto
+                {
+                    GroupId = group.GroupId,
+                    Name = group.Name,
+                    //todo
+                }).ToList();
+            return groupsDto;
+                
         }
 
-        public void UpdateGroup(Group group)
+        public void UpdateGroup(GroupDto group)
         {
-            _groupRepository.Update(group);
+            //_groupRepository.Update(group);
         }
     }
 }

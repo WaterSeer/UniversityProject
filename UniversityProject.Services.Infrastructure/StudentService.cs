@@ -5,41 +5,63 @@ using System.Text;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
+using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProject.Services.Infrastructure
 {
-    public class StudentService : Interfaces.IStudentService
+    public class StudentService : IStudentService
     {
-        private readonly IRepository<Student> _studentRepository;
-              
+        private readonly IRepository<Student> _studentRepository;              
 
         public StudentService(IRepository<Student> studentRepository)
         {
             _studentRepository = studentRepository;
         }       
 
-        public IEnumerable<Student> GetStudents()
+        public IEnumerable<StudentDto> GetStudents()
         {
-            return _studentRepository.GetAll();
+            var students = _studentRepository.GetAll();
+            var studentsDto = students
+                .Select(student => new StudentDto
+                {
+                    StudentId = student.StudentId,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName
+                    //todo
+                }).ToList();
+            return studentsDto;
         }
 
-        public Student GetStudent(int id)
+        public StudentDto GetStudent(int id)
         {
-            return _studentRepository.Get(id);
+            var student = _studentRepository.Get(id);
+            return new StudentDto()
+            {
+                StudentId = student.StudentId,
+                FirstName = student.FirstName,
+                LastName = student.LastName
+                //todo
+            };
         }
 
-        public void UpdateStudent(Student student)
+        public void UpdateStudent(StudentDto student)
         {
-            _studentRepository.Update(student);
+            //_studentRepository.Update(student);
         }
 
-        public Student DeleteStudent(int id)
+        public StudentDto DeleteStudent(int id)
         {
             var student = _studentRepository.Get(id);
             _studentRepository.Delete(id);
             _studentRepository.SaveChanges();
-            return student;
+            return new StudentDto()
+            {
+                StudentId = student.StudentId,
+                FirstName = student.FirstName,
+                LastName = student.LastName
+                //todo
+            };
         }
 
         

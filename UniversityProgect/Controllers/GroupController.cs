@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using UniversityProgect.Models.ViewModels;
-using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
@@ -42,7 +42,7 @@ namespace UniversityProgect.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Group group)
+        public IActionResult Edit(GroupDto group)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace UniversityProgect.Controllers
                 return RedirectToAction("List");
             }
 
-            Group deleteGroup = _groupService.DeleteGroup(groupId);
+            GroupDto deleteGroup = _groupService.DeleteGroup(groupId);
             if (deleteGroup != null)
             {
                 TempData["message"] = $"{deleteGroup.Name} has deleted";

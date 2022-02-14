@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using UniversityProgect.Models.ViewModels;
-using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
@@ -55,7 +55,7 @@ namespace UniversityProgect.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Student student)
+        public IActionResult Edit(StudentDto student)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteStudent(int studentId)
         {
-            Student deleteStudent = _servise.DeleteStudent(studentId);
+            StudentDto deleteStudent = _servise.DeleteStudent(studentId);
             if (deleteStudent != null)
             {
                 TempData["message"] = $"{deleteStudent.FirstName} {deleteStudent.LastName} was deleted";

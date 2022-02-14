@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 
 namespace UniversityProgect.Models.ViewModels
 {
     public class GroupListViewModel
     {
-        public IEnumerable<Group> Groups { get; set; }
+        public IEnumerable<GroupDto> Groups { get; set; }
     }
 }

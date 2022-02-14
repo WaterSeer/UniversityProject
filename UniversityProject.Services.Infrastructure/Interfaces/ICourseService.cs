@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 
 namespace UniversityProject.Services.Infrastructure.Interfaces
 {
     public interface ICourseService
     {
-        IEnumerable<Course> GetCourses();
+        IEnumerable<CourseDto> GetCourses();
 
-        Course GetCourse(int id);
+        CourseDto GetCourse(int id);
 
-        void UpdateCourse(Course course);
+        void UpdateCourse(CourseDto course);
 
-        Course DeleteCourse(int id);
+        CourseDto DeleteCourse(int id);
     }
 }

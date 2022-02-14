@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 
 namespace UniversityProgect.Models.ViewModels
 {
     public class CourseListViewModel
     {
-        public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<CourseDto> Courses { get; set; }
     }
 }

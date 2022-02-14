@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using UniversityProgect.Models.ViewModels;
-using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace UniversityProgect.Controllers
@@ -30,7 +30,7 @@ namespace UniversityProgect.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Course course)
+        public IActionResult Edit(CourseDto course)
         {
             if (ModelState.IsValid)
             {
@@ -45,7 +45,7 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course deleteCourse = _service.DeleteCourse(courseId);
+            CourseDto deleteCourse = _service.DeleteCourse(courseId);
             if (deleteCourse != null)
             {
                 TempData["message"] = $"{deleteCourse.Name} was deleted";

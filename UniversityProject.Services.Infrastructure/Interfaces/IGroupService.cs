@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
+using UniversityProject.Services.Infrastructure.Dtos;
 
 namespace UniversityProject.Services.Infrastructure.Interfaces
 {
     public interface IGroupService
     {
-        IEnumerable<Group> GetGroups();
+        IEnumerable<GroupDto> GetGroups();
 
-        Group GetGroup(int id);
+        GroupDto GetGroup(int id);
 
-        void UpdateGroup(Group group);
+        void UpdateGroup(GroupDto group);
 
-        Group DeleteGroup(int id);
+        GroupDto DeleteGroup(int id);
 
     }
 }
