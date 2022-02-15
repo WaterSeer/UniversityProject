@@ -60,10 +60,8 @@ namespace UniversityProject.Services.Infrastructure
         {
              var prevGroup = _groupRepository.GetAll().FirstOrDefault(g => g.GroupId == group.GroupId);
             if(prevGroup != null)
-            {
-                prevGroup.GroupId = group.GroupId;
-                prevGroup.Name = group.Name;
-                prevGroup.CourseId = group.CourseId;     
+            {                
+                prevGroup.Name = group.Name;                     
                 _groupRepository.Update(prevGroup);
             }
         }

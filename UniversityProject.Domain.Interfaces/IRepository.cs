@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace UniversityProject.Domain.Interfaces
 {
@@ -8,8 +9,12 @@ namespace UniversityProject.Domain.Interfaces
 
         T Get(int id);
 
+        Task<T> GetAsync(int id);
+
         void Update(T entity);
 
         T Delete(int id);
+
+        Task<T> DeleteAsync(int id);
     }
 }
