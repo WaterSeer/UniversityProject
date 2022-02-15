@@ -17,17 +17,17 @@ namespace UniversityProject.Services.Infrastructure
         {
             _groupRepository = groupRepository;
         }
+        
 
         public GroupDto DeleteGroup(int id)
         {
             var group = _groupRepository.Get(id);
             _groupRepository.Delete(id);
-            _groupRepository.SaveChanges();
             return new GroupDto()
             {
                 GroupId = group.GroupId,
                 Name = group.Name,
-                //todo
+                CourseId = group.CourseId is null ? 0 : group.CourseId.Value
             };
         }
 
@@ -38,7 +38,7 @@ namespace UniversityProject.Services.Infrastructure
             {
                 GroupId = group.GroupId,
                 Name = group.Name,
-                //todo
+                CourseId = group.CourseId is null ? 0 : group.CourseId.Value
             };
         }
 
@@ -50,7 +50,7 @@ namespace UniversityProject.Services.Infrastructure
                 {
                     GroupId = group.GroupId,
                     Name = group.Name,
-                    //todo
+                    CourseId = group.CourseId == null ? 0 : group.CourseId.Value
                 }).ToList();
             return groupsDto;
                 
@@ -58,7 +58,14 @@ namespace UniversityProject.Services.Infrastructure
 
         public void UpdateGroup(GroupDto group)
         {
-            //_groupRepository.Update(group);
+             var prevGroup = _groupRepository.GetAll().FirstOrDefault(g => g.GroupId == group.GroupId);
+            if(prevGroup != null)
+            {
+                prevGroup.GroupId = group.GroupId;
+                prevGroup.Name = group.Name;
+                prevGroup.CourseId = group.CourseId;     
+                _groupRepository.Update(prevGroup);
+            }
         }
     }
 }

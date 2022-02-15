@@ -8,6 +8,7 @@ using UniversityProgect.Models.ViewModels;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 using UniversityProject.Services.Infrastructure;
+using UniversityProject.Services.Infrastructure.Dtos;
 
 namespace TestUniversity
 {
@@ -20,6 +21,9 @@ namespace TestUniversity
         Mock<IRepository<Course>> _courseMock;
         Mock<IRepository<Group>> _groupMock;
         Mock<ITempDataDictionary> _tempDataMock;
+        CourseService _courseService;
+        GroupService _groupService;
+        StudentService _studentService;
         Student _student;
         Course _course;
         Group _groupForDelete;
@@ -37,7 +41,8 @@ namespace TestUniversity
                 _student,
                 new Student { StudentId = 3, FirstName = "John", LastName = "Archer", GroupId = 1 }
             }).AsQueryable());
-            _studentController = new StudentController(new StudentService(_studentMock.Object))
+            _studentService = new StudentService(_studentMock.Object);
+            _studentController = new StudentController(_studentService, _groupService)
             {
                 TempData = _tempDataMock.Object
             };
@@ -49,9 +54,10 @@ namespace TestUniversity
                 _course,
                 new Course { CourseId = 3, Name = "course3", Description = "CCDescription" }
             }).AsQueryable());
-            _courseController = new CourseController(new CourseService(_courseMock.Object))
+            _courseService = new CourseService(_courseMock.Object);
+            _courseController = new CourseController(_courseService)
             {
-                TempData = _tempDataMock.Object
+               TempData = _tempDataMock.Object
             };
 
             _groupMock = new Mock<IRepository<Group>>();
@@ -62,7 +68,8 @@ namespace TestUniversity
                 _groupForDelete,
                 new Group{GroupId = 2, Name = "group3", CourseId = 1}
             }).AsQueryable());
-            _groupController = new GroupController(new GroupService(_groupMock.Object), new StudentService(_studentMock.Object))
+            _groupService = new GroupService(_groupMock.Object);
+            _groupController = new GroupController(_groupService, _studentService)
             {
                 TempData = _tempDataMock.Object
             };
@@ -102,7 +109,7 @@ namespace TestUniversity
                 FirstName = "Todd",
                 LastName = "Smith"
             };
-            IActionResult result = _studentController.Edit(student);
+            IActionResult result = _studentController.Edit((int)student.StudentId);
             _studentMock.Verify(m => m.Update(student));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
@@ -119,7 +126,7 @@ namespace TestUniversity
                 LastName = "Smith"
             };
             _studentController.ModelState.AddModelError("error", "error");
-            IActionResult result = _studentController.Edit(student);
+            IActionResult result = _studentController.Edit((int)student.StudentId);
             _studentMock.Verify(m => m.Update(It.IsAny<Student>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }
@@ -146,7 +153,7 @@ namespace TestUniversity
                 Name = "Course1",
                 Description = "Description",
             };
-            IActionResult result = _courseController.Edit(course);
+            IActionResult result = _courseController.Edit((int)course.CourseId);
             _courseMock.Verify(m => m.Update(course));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
@@ -162,7 +169,7 @@ namespace TestUniversity
                 Description = "Description",
             };
             _courseController.ModelState.AddModelError("error", "error");
-            IActionResult result = _courseController.Edit(course);
+            IActionResult result = _courseController.Edit((int)course.CourseId);
             _courseMock.Verify(m => m.Update(It.IsAny<Course>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }
@@ -194,7 +201,7 @@ namespace TestUniversity
                 GroupId = 1,
                 Name = "Group1",
             };
-            IActionResult result = _groupController.Edit(group);
+            IActionResult result = _groupController.Edit((int)group.GroupId);
             _groupMock.Verify(m => m.Update(group));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
@@ -208,7 +215,7 @@ namespace TestUniversity
                 Name = "Group1",
             };
             _groupController.ModelState.AddModelError("error", "error");
-            IActionResult result = _groupController.Edit(group);
+            IActionResult result = _groupController.Edit((int)group.GroupId);
             _groupMock.Verify(m => m.Update(It.IsAny<Group>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }

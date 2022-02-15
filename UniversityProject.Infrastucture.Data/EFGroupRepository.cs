@@ -41,13 +41,9 @@ namespace UniversityProject.Infrastucture.Data
                 if (dbEntry != null)
                 {
                     dbEntry.Name = group.Name;
+                    _context.Groups.Update(dbEntry);
                 }
             }
-            _context.SaveChanges();
-        }
-
-        public void SaveChanges()
-        {
             _context.SaveChanges();
         }
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace UniversityProject.Services.Infrastructure.Dtos
+﻿namespace UniversityProject.Services.Infrastructure.Dtos
 {
     public class GroupDto
     {
@@ -9,9 +7,5 @@ namespace UniversityProject.Services.Infrastructure.Dtos
         public long CourseId { get; set; }
 
         public string Name { get; set; }
-
-        public CourseDto Course { get; set; }
-
-        public IEnumerable<StudentDto> Students { get; set; }
     }
 }

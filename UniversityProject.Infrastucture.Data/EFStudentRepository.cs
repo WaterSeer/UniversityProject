@@ -44,11 +44,6 @@ namespace UniversityProject.Infrastucture.Data
                 }
             }
             _context.SaveChanges();
-        }
-
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
+        }        
     }
 }

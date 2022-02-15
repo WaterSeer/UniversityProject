@@ -8,12 +8,14 @@ namespace UniversityProgect.Controllers
 {
     public class StudentController : Controller
     {
-        private IStudentService _servise;
+        private IStudentService _service;
+        private IGroupService _groupService;
         public int PageSize = 10;
 
-        public StudentController(IStudentService service)
+        public StudentController(IStudentService servise, IGroupService groupService)
         {
-            _servise = service;
+            _service = servise;
+            _groupService = groupService;
         }
 
         [HttpPost]
@@ -21,29 +23,46 @@ namespace UniversityProgect.Controllers
         {
             return View(new StudentsListViewModel
             {
-                Students = _servise.GetStudents().Where(S => S.GroupId == groupId),
+                Students = _service.GetStudents().Where(S => S.GroupId == groupId),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = 1,
-                    ItemsPerPage = _servise.GetStudents().Count(),
-                    TotalItems = _servise.GetStudents().Count()
+                    ItemsPerPage = _service.GetStudents().Count(),
+                    TotalItems = _service.GetStudents().Count()
                 }
             });
         }
 
         public ViewResult List(string category, int productPage = 1)
         {
+            string groupCategory = "1";
+            if (category != null)
+                groupCategory = _groupService.GetGroups().FirstOrDefault(g => g.Name == category).GroupId.ToString();
+            var a = new StudentsListViewModel
+            {
+                Students = _service.GetStudents()
+                 .Where(p => category == null || groupCategory == category)
+                 .Skip((productPage - 1) * PageSize)
+                 .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = productPage,
+                    ItemsPerPage = PageSize,
+                    TotalItems = _service.GetStudents().Count()
+                },
+                CurrentCategory = category
+            };
             return View(new StudentsListViewModel
             {
-                Students = _servise.GetStudents()
-                .Where(p => category == null || p.Group.Name == category)
+                Students = _service.GetStudents()
+                .Where(p => category == null || groupCategory == category)
                 .Skip((productPage - 1) * PageSize)
                 .Take(PageSize),
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = productPage,
                     ItemsPerPage = PageSize,
-                    TotalItems = _servise.GetStudents().Count()
+                    TotalItems = _service.GetStudents().Count()
                 },
                 CurrentCategory = category
             });
@@ -51,7 +70,7 @@ namespace UniversityProgect.Controllers
 
         public ViewResult Edit(int studentId)
         {
-            return View(_servise.GetStudents().FirstOrDefault(s => s.StudentId == studentId));
+            return View(_service.GetStudents().FirstOrDefault(s => s.StudentId == studentId));
         }
 
         [HttpPost]
@@ -59,7 +78,7 @@ namespace UniversityProgect.Controllers
         {
             if (ModelState.IsValid)
             {
-                _servise.UpdateStudent(student);
+                _service.UpdateStudent(student);
                 TempData["message"] = $"{student.FirstName} {student.LastName} has been saved";
                 return RedirectToAction("List");
             }
@@ -70,7 +89,7 @@ namespace UniversityProgect.Controllers
         [HttpPost]
         public IActionResult DeleteStudent(int studentId)
         {
-            StudentDto deleteStudent = _servise.DeleteStudent(studentId);
+            StudentDto deleteStudent = _service.DeleteStudent(studentId);
             if (deleteStudent != null)
             {
                 TempData["message"] = $"{deleteStudent.FirstName} {deleteStudent.LastName} was deleted";

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 using UniversityProject.Services.Infrastructure.Dtos;
@@ -12,7 +9,6 @@ namespace UniversityProject.Services.Infrastructure
 {
     public class CourseService : ICourseService
     {
-
         private readonly IRepository<Course> _courseRepository;
 
         public CourseService(IRepository<Course> courseRepository)
@@ -24,13 +20,11 @@ namespace UniversityProject.Services.Infrastructure
         {
             var course = _courseRepository.Get(id);
             _courseRepository.Delete(id);
-            _courseRepository.SaveChanges();
             return new CourseDto()
             {
                 CourseId = course.CourseId,
                 Name = course.Name,
-                Description = course.Description,
-                Groups = (IEnumerable<GroupDto>)course.Groups //todo
+                Description = course.Description
             };
         }
 
@@ -41,8 +35,7 @@ namespace UniversityProject.Services.Infrastructure
             {
                 CourseId = course.CourseId,
                 Name = course.Name,
-                Description = course.Description,
-                Groups = (IEnumerable<GroupDto>)course.Groups //todo
+                Description = course.Description
             };
         }
 
@@ -54,19 +47,22 @@ namespace UniversityProject.Services.Infrastructure
                 {
                     CourseId = course.CourseId,
                     Name = course.Name,
-                    Description = course.Description,
-                    Groups = (IEnumerable<GroupDto>)course.Groups //todo
+                    Description = course.Description
                 }).ToList();
-            return coursesDto;            
+            return coursesDto;
         }
 
         public void UpdateCourse(CourseDto course)
-        {            
-            
-            
-            //var course = _courseRepository.Get(course.CourseId);
-
-            //_courseRepository.Update(course);
+        {
+            var prevCourse = _courseRepository.GetAll().FirstOrDefault(c => c.CourseId == course.CourseId);
+            if (prevCourse != null)
+            {
+                prevCourse.Name = course.Name;
+                prevCourse.Description = course.Description;
+                prevCourse.CourseId = course.CourseId;
+                _courseRepository.Update(prevCourse);
+            }
+                  
         }
     }
 }

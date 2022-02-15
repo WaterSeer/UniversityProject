@@ -21,7 +21,6 @@ namespace UniversityProgect.Controllers
             {
                 Courses = _service.GetCourses()
             });
-
         }
 
         public ViewResult Edit(int courseId)

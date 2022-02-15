@@ -19,6 +19,17 @@ namespace UniversityProject.Services.Infrastructure
             _studentRepository = studentRepository;
         }       
 
+        private StudentDto Get(Student student)
+        {
+            return new StudentDto()
+            {
+                StudentId = student.StudentId,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                GroupId = student.GroupId is null ? 0 : student.GroupId.Value                
+            };
+        }
+
         public IEnumerable<StudentDto> GetStudents()
         {
             var students = _studentRepository.GetAll();
@@ -27,8 +38,9 @@ namespace UniversityProject.Services.Infrastructure
                 {
                     StudentId = student.StudentId,
                     FirstName = student.FirstName,
-                    LastName = student.LastName
-                    //todo
+                    LastName = student.LastName,
+                    GroupId = student.GroupId == null ? 0 : student.GroupId.Value
+
                 }).ToList();
             return studentsDto;
         }
@@ -40,27 +52,33 @@ namespace UniversityProject.Services.Infrastructure
             {
                 StudentId = student.StudentId,
                 FirstName = student.FirstName,
-                LastName = student.LastName
-                //todo
+                LastName = student.LastName,
+                GroupId = student.GroupId is null ? 0 : student.GroupId.Value
             };
         }
 
         public void UpdateStudent(StudentDto student)
         {
-            //_studentRepository.Update(student);
+            var prevStudent = _studentRepository.GetAll().FirstOrDefault(s => s.StudentId == student.StudentId);
+            if (prevStudent != null)
+            {
+                prevStudent.FirstName = student.FirstName;
+                prevStudent.LastName = student.LastName;
+                prevStudent.GroupId = student.GroupId;
+                _studentRepository.Update(prevStudent);
+            }
         }
 
         public StudentDto DeleteStudent(int id)
         {
             var student = _studentRepository.Get(id);
             _studentRepository.Delete(id);
-            _studentRepository.SaveChanges();
             return new StudentDto()
             {
                 StudentId = student.StudentId,
                 FirstName = student.FirstName,
-                LastName = student.LastName
-                //todo
+                LastName = student.LastName,
+                GroupId = student.GroupId is null ? 0 : student.GroupId.Value
             };
         }
 

@@ -11,7 +11,5 @@ namespace UniversityProject.Domain.Interfaces
         void Update(T entity);
 
         T Delete(int id);
-
-        void SaveChanges();
     }
 }
