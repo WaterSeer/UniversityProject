@@ -144,35 +144,35 @@ namespace TestUniversity
         /// </summary>
         /// 
 
-        [Test]
-        public void CanSaveCourseValidChanges()
-        {
-            Course course = new Course()
-            {
-                CourseId = 1,
-                Name = "Course1",
-                Description = "Description",
-            };
-            IActionResult result = _courseController.Edit((int)course.CourseId);
-            _courseMock.Verify(m => m.Update(course));
-            Assert.IsInstanceOf<RedirectToActionResult>(result);
-            Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
-        }
+        //[Test]
+        //public void CanSaveCourseValidChanges()
+        //{
+        //    Course course = new Course()
+        //    {
+        //        CourseId = 1,
+        //        Name = "Course1",
+        //        Description = "Description",
+        //    };
+        //    IActionResult result = _courseController.Edit((int)course.CourseId);
+        //    _courseMock.Verify(m => m.Update(course));
+        //    Assert.IsInstanceOf<RedirectToActionResult>(result);
+        //    Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
+        //}
 
-        [Test]
-        public void CannotSaveCourseInvalidChanges()
-        {
-            Course course = new Course()
-            {
-                CourseId = 1,
-                Name = "Course1",
-                Description = "Description",
-            };
-            _courseController.ModelState.AddModelError("error", "error");
-            IActionResult result = _courseController.Edit((int)course.CourseId);
-            _courseMock.Verify(m => m.Update(It.IsAny<Course>()), Times.Never());
-            Assert.IsInstanceOf<ViewResult>(result);
-        }
+        //[Test]
+        //public void CannotSaveCourseInvalidChanges()
+        //{
+        //    Course course = new Course()
+        //    {
+        //        CourseId = 1,
+        //        Name = "Course1",
+        //        Description = "Description",
+        //    };
+        //    _courseController.ModelState.AddModelError("error", "error");
+        //    IActionResult result = _courseController.Edit((int)course.CourseId);
+        //    _courseMock.Verify(m => m.Update(It.IsAny<Course>()), Times.Never());
+        //    Assert.IsInstanceOf<ViewResult>(result);
+        //}
 
         [Test]
         public void CanDeleteValidCourse()

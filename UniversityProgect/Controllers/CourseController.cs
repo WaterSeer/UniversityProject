@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UniversityProgect.Models.ViewModels;
 using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
@@ -15,6 +17,14 @@ namespace UniversityProgect.Controllers
             _service = service;
         }
 
+        //public async Task<ViewResult> List()
+        //{
+        //    return View(new CourseListViewModel
+        //    {
+        //        Courses = _service.GetCoursesAsync().Result.Data
+        //    });
+        //}
+
         public ViewResult List()
         {
             return View(new CourseListViewModel
@@ -23,18 +33,19 @@ namespace UniversityProgect.Controllers
             });
         }
 
-        public ViewResult Edit(int courseId)
+        public async Task<ViewResult> Edit(int courseId)
         {
+            //return  View(_service.GetCoursesAsync().Result.Data.FirstOrDefault(p => p.CourseId == courseId));
             return View(_service.GetCourses().FirstOrDefault(p => p.CourseId == courseId));
         }
 
         [HttpPost]
-        public IActionResult Edit(CourseDto course)
+        public async Task<IActionResult> Edit(CourseDto course)
         {
             if (ModelState.IsValid)
             {
-                _service.UpdateCourse(course);
-                TempData["message"] = $"{course.Name} has been saved";
+                await _service.UpdateCourseAsync(course);
+                TempData["message"] = $"{course.Name} has been saved_1";
                 return RedirectToAction("List");
             }
             else
@@ -42,13 +53,16 @@ namespace UniversityProgect.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteCourse(int courseId)
+        public async Task<IActionResult> DeleteCourse(int courseId)
         {
-            CourseDto deleteCourse = _service.DeleteCourse(courseId);
-            if (deleteCourse != null)
+            var deleteCourse = await _service.DeleteCourseAsync(courseId);
+            if (deleteCourse.Success)
             {
-                TempData["message"] = $"{deleteCourse.Name} was deleted";
+                TempData["message"] = $"{deleteCourse.Data.Name} was deleted";
             }
+            else
+                TempData["message"] = $"{deleteCourse.Message}";
+
             return RedirectToAction("List");
         }
 

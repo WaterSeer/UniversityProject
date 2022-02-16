@@ -19,17 +19,17 @@ namespace UniversityProject.Services.Infrastructure
             _courseRepository = courseRepository;
         }
 
-        public CourseDto DeleteCourse(int id)
-        {
-            var course = _courseRepository.Get(id);
-            _courseRepository.Delete(id);
-            return new CourseDto()
-            {
-                CourseId = course.CourseId,
-                Name = course.Name,
-                Description = course.Description
-            };
-        }
+        //public CourseDto DeleteCourse(int id)
+    //    {
+      //      var course = _courseRepository.Get(id);
+      //      _courseRepository.Delete(id);
+       //     return new CourseDto()
+        //    {
+         //       CourseId = course.CourseId,
+          //      Name = course.Name,
+            //    Description = course.Description
+      //      };
+    //    }
 
         public async Task<ServiceResponse<CourseDto>> DeleteCourseAsync(int id)
         {
@@ -52,14 +52,13 @@ namespace UniversityProject.Services.Infrastructure
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
             }
-            return serviceResponse;
-                //return new CourseDto()
-                //{
-                //    CourseId = course.CourseId,
-                //    Name = course.Name,
-                //    Description = course.Description
-                //};
-            }
+            return serviceResponse;                
+        }
+
+        public Task<ServiceResponse<CourseDto>> GetCourseAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public CourseDto GetCourse(int id)
         {
@@ -72,7 +71,15 @@ namespace UniversityProject.Services.Infrastructure
             };
         }
 
-        
+        //public async Task<ServiceResponse<CourseDto>> GetCourseAsync(int id)
+        //{
+        //    ServiceResponse<CourseDto> result = new ServiceResponse<CourseDto>();
+        //    var course = await _courseRepository.GetAsync(id);
+        //    result.Data.CourseId = course.CourseId;
+        //    result.Data.Name = course.Name;
+        //    result.Data.Description = course.Description;
+        //    return result;
+        //}
 
         public IEnumerable<CourseDto> GetCourses()
         {
@@ -86,25 +93,50 @@ namespace UniversityProject.Services.Infrastructure
                 }).ToList();
             return coursesDto;
         }
-        public async Task<List<CourseDto>> GetCoursesAsync()
+
+        public Task<ServiceResponse<List<CourseDto>>> GetCoursesAsync()
         {
-            ServiceResponse<List<CourseDto>> serviceResponse = new ServiceResponse<List<CourseDto>>();
-            var courses = _courseRepository.GetAll();
-            serviceResponse.Data = await courses.ToListAsync();
-            return serviceResponse;
+            throw new NotImplementedException();
         }
 
+        //public async Task<ServiceResponse<List<CourseDto>>> GetCoursesAsync()
+        //{
+        //    ServiceResponse<List<CourseDto>> serviceResponse = new ServiceResponse<List<CourseDto>>();
+        //    var courses = _courseRepository.GetAll();
+        //    //serviceResponse.Data = await courses.  //ToListAsync();
+        //    return serviceResponse;
+        //}
 
-        public void UpdateCourse(CourseDto course)
+
+        //public void UpdateCourse(CourseDto course)
+        //{
+        //    var prevCourse = _courseRepository.GetAll().FirstOrDefault(c => c.CourseId == course.CourseId);
+        //    if (prevCourse != null)
+        //    {
+        //        prevCourse.Name = course.Name;
+        //        prevCourse.Description = course.Description;                
+        //        _courseRepository.Update(prevCourse);
+        //    }                  
+        //}
+
+        public async Task<ServiceResponse<CourseDto>> UpdateCourseAsync(CourseDto course)
         {
-            var prevCourse = _courseRepository.GetAll().FirstOrDefault(c => c.CourseId == course.CourseId);
-            if (prevCourse != null)
+            ServiceResponse<CourseDto> serviceResponse = new ServiceResponse<CourseDto>();
+            var prevCourse = await _courseRepository.GetAll().FirstOrDefaultAsync(c => c.CourseId == course.CourseId);
+            if(prevCourse == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Course not found";
+            }
+            else
             {
                 prevCourse.Name = course.Name;
                 prevCourse.Description = course.Description;                
+                serviceResponse.Message = "Course updated";
+                serviceResponse.Data = course;
                 _courseRepository.Update(prevCourse);
             }
-                  
+            return serviceResponse;
         }
     }
 }

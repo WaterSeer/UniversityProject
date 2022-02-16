@@ -10,12 +10,12 @@ namespace UniversityProject.Services.Infrastructure.Interfaces
 {
     public interface ICourseService
     {
-        IEnumerable<CourseDto> GetCourses();
+        ServiceResponse<CourseDto> GetCourse(int id);
 
-        CourseDto GetCourse(int id);
+        ServiceResponse<IEnumerable<CourseDto>> GetCourses();
 
-        void UpdateCourse(CourseDto course);
+        Task<ServiceResponse<CourseDto>> UpdateCourseAsync(CourseDto course);        
 
-        CourseDto DeleteCourse(int id);
+        Task<ServiceResponse<CourseDto>> DeleteCourseAsync(int id);
     }
 }

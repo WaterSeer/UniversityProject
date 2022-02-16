@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 
@@ -44,6 +45,16 @@ namespace UniversityProject.Infrastucture.Data
                 }
             }
             _context.SaveChanges();
-        }        
+        }
+
+        public Task<Student> GetAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<Student> DeleteAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

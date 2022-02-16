@@ -64,5 +64,25 @@ namespace UniversityProject.Infrastucture.Data
             }
             _context.SaveChanges();
         }
+
+        public async Task<Course> UpdateAsync(Course course)
+        {
+            Course dbEntry = new Course();
+            if (course.CourseId == 0)
+            {
+                await _context.Courses.AddAsync(course);
+            }
+            else
+            {
+                dbEntry = await _context.Courses.FirstOrDefaultAsync(c => c.CourseId == course.CourseId);
+                if (dbEntry != null)
+                {
+                    dbEntry.Name = course.Name;
+                    dbEntry.Description = course.Description;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return dbEntry;
+        }
     }
 }
