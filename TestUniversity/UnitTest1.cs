@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
 using NUnit.Framework;
 using System.Linq;
+using System.Threading.Tasks;
 using UniversityProgect.Controllers;
 using UniversityProgect.Models.ViewModels;
 using UniversityProject.Domain.Core;
@@ -100,7 +101,7 @@ namespace TestUniversity
         }
 
         [Test]
-        public void CanSaveStudentValidChanges()
+        public async void CanSaveStudentValidChanges()
         {
             Student student = new Student()
             {
@@ -110,7 +111,7 @@ namespace TestUniversity
                 LastName = "Smith"
             };
             IActionResult result = _studentController.Edit((int)student.StudentId);
-            _studentMock.Verify(m => m.Update(student));
+            _studentMock.Verify( m =>  m.UpdateAsync(student));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
         }
@@ -127,15 +128,15 @@ namespace TestUniversity
             };
             _studentController.ModelState.AddModelError("error", "error");
             IActionResult result = _studentController.Edit((int)student.StudentId);
-            _studentMock.Verify(m => m.Update(It.IsAny<Student>()), Times.Never());
+            _studentMock.Verify(m => m.UpdateAsync(It.IsAny<Student>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
         [Test]
-        public void CanDeleteValidStudent()
+        public async Task CanDeleteValidStudent()
         {
-            _studentController.DeleteStudent(2);
-            _studentMock.Verify(s => s.Delete((int)_student.StudentId));
+            await _studentController.DeleteStudent(2);
+            _studentMock.Verify(s => s.DeleteAsync((int)_student.StudentId));
         }
 
 
@@ -144,41 +145,41 @@ namespace TestUniversity
         /// </summary>
         /// 
 
-        //[Test]
-        //public void CanSaveCourseValidChanges()
-        //{
-        //    Course course = new Course()
-        //    {
-        //        CourseId = 1,
-        //        Name = "Course1",
-        //        Description = "Description",
-        //    };
-        //    IActionResult result = _courseController.Edit((int)course.CourseId);
-        //    _courseMock.Verify(m => m.Update(course));
-        //    Assert.IsInstanceOf<RedirectToActionResult>(result);
-        //    Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
-        //}
-
-        //[Test]
-        //public void CannotSaveCourseInvalidChanges()
-        //{
-        //    Course course = new Course()
-        //    {
-        //        CourseId = 1,
-        //        Name = "Course1",
-        //        Description = "Description",
-        //    };
-        //    _courseController.ModelState.AddModelError("error", "error");
-        //    IActionResult result = _courseController.Edit((int)course.CourseId);
-        //    _courseMock.Verify(m => m.Update(It.IsAny<Course>()), Times.Never());
-        //    Assert.IsInstanceOf<ViewResult>(result);
-        //}
+        [Test]
+        public async Task CanSaveCourseValidChanges()
+        {
+            Course course = new Course()
+            {
+                CourseId = 1,
+                Name = "Course1",
+                Description = "Description",
+            };
+            IActionResult result = _courseController.Edit((int)course.CourseId);
+            _courseMock.Verify(m => m.UpdateAsync(course));
+            Assert.IsInstanceOf<RedirectToActionResult>(result);
+            Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
+        }
 
         [Test]
-        public void CanDeleteValidCourse()
+        public void CannotSaveCourseInvalidChanges()
         {
-            _courseController.DeleteCourse(2);
-            _courseMock.Verify(s => s.Delete((int)_course.CourseId));
+            Course course = new Course()
+            {
+                CourseId = 1,
+                Name = "Course1",
+                Description = "Description",
+            };
+            _courseController.ModelState.AddModelError("error", "error");
+            IActionResult result = _courseController.Edit((int)course.CourseId);
+            _courseMock.Verify(m => m.UpdateAsync(It.IsAny<Course>()), Times.Never());
+            Assert.IsInstanceOf<ViewResult>(result);
+        }
+
+        [Test]
+        public async Task CanDeleteValidCourse()
+        {
+            await _courseController.DeleteCourse(2);
+            _courseMock.Verify(s => s.DeleteAsync((int)_course.CourseId));
         }
 
         /// <summary>
@@ -202,7 +203,7 @@ namespace TestUniversity
                 Name = "Group1",
             };
             IActionResult result = _groupController.Edit((int)group.GroupId);
-            _groupMock.Verify(m => m.Update(group));
+            _groupMock.Verify(m => m.UpdateAsync(group));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
         }
@@ -216,7 +217,7 @@ namespace TestUniversity
             };
             _groupController.ModelState.AddModelError("error", "error");
             IActionResult result = _groupController.Edit((int)group.GroupId);
-            _groupMock.Verify(m => m.Update(It.IsAny<Group>()), Times.Never());
+            _groupMock.Verify(m => m.UpdateAsync(It.IsAny<Group>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
         }
 
@@ -224,7 +225,7 @@ namespace TestUniversity
         public void CanDeleteValidGroup()
         {
             _groupController.DeleteGroup(3);
-            _groupMock.Verify(s => s.Delete((int)_groupForDelete.GroupId));
+            _groupMock.Verify(s => s.DeleteAsync((int)_groupForDelete.GroupId));
         }
     }
 }

@@ -10,9 +10,9 @@ namespace UniversityProject.Services.Infrastructure.Interfaces
 {
     public interface IStudentService
     {
-        IEnumerable<StudentDto> GetStudents();
-        StudentDto GetStudent(int id);
-        void UpdateStudent(StudentDto student);
-        StudentDto DeleteStudent(int id);
+        ServiceResponse<IEnumerable<StudentDto>> GetStudents();
+        ServiceResponse<StudentDto> GetStudent(int id);
+        Task<ServiceResponse<StudentDto>> UpdateStudentAsync(StudentDto student);
+        Task<ServiceResponse<StudentDto>> DeleteStudentAsync(int id);
     }
 }

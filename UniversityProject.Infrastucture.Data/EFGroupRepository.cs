@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
@@ -13,49 +14,39 @@ namespace UniversityProject.Infrastucture.Data
             _context = context;
         }
         public IQueryable<Group> GetAll() => _context.Groups;
-
-
+        
         public Group Get(int id)
         {
             return _context.Groups.FirstOrDefault(g => g.GroupId == id);
         }
-        public Group Delete(int groupId)
+        public async Task<Group> DeleteAsync(int groupId)
         {
-            Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == groupId);
+            Task<Group> dbEntry = _context.Groups.FirstOrDefaultAsync(g => g.GroupId == groupId);
             if (dbEntry != null)
             {
-                _context.Groups.Remove(dbEntry);
-                _context.SaveChanges();
+                _context.Groups.Remove(dbEntry.Result);
+                await _context.SaveChangesAsync();
             }
-            return dbEntry;
+            return await dbEntry;
         }
 
-        public void Update(Group group)
+        public async Task<Group> UpdateAsync(Group group)
         {
+            Group dbEntry = new Group();
             if (group.GroupId == 0)
             {
-                _context.Groups.Add(group);
+                await _context.Groups.AddAsync(group);
             }
             else
             {
-                Group dbEntry = _context.Groups.FirstOrDefault(g => g.GroupId == group.GroupId);
+                dbEntry = await _context.Groups.FirstOrDefaultAsync(g => g.GroupId == group.GroupId);
                 if (dbEntry != null)
                 {
-                    dbEntry.Name = group.Name;
-                    _context.Groups.Update(dbEntry);
+                    dbEntry.Name = group.Name;                    
                 }
             }
-            _context.SaveChanges();
-        }
-
-        public Task<Group> GetAsync(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<Group> DeleteAsync(int id)
-        {
-            throw new System.NotImplementedException();
+            await _context.SaveChangesAsync();
+            return dbEntry;
         }
     }
 }

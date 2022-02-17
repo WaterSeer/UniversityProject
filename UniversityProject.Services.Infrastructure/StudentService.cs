@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
@@ -12,28 +12,31 @@ namespace UniversityProject.Services.Infrastructure
 {
     public class StudentService : IStudentService
     {
-        private readonly IRepository<Student> _studentRepository;              
+        private readonly IRepository<Student> _studentRepository;
 
         public StudentService(IRepository<Student> studentRepository)
         {
             _studentRepository = studentRepository;
-        }       
+        }
 
-        private StudentDto Get(Student student)
+        private ServiceResponse<StudentDto> Get(Student student)
         {
-            return new StudentDto()
+            ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
+            serviceResponse.Data = new StudentDto()
             {
                 StudentId = student.StudentId,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
-                GroupId = student.GroupId is null ? 0 : student.GroupId.Value                
+                GroupId = student.GroupId is null ? 0 : student.GroupId.Value
             };
+            return serviceResponse;
         }
 
-        public IEnumerable<StudentDto> GetStudents()
+        public ServiceResponse<IEnumerable<StudentDto>> GetStudents()
         {
+            ServiceResponse<IEnumerable<StudentDto>> serviceResponse = new ServiceResponse<IEnumerable<StudentDto>>();
             var students = _studentRepository.GetAll();
-            var studentsDto = students
+            serviceResponse.Data = students
                 .Select(student => new StudentDto
                 {
                     StudentId = student.StudentId,
@@ -42,46 +45,66 @@ namespace UniversityProject.Services.Infrastructure
                     GroupId = student.GroupId == null ? 0 : student.GroupId.Value
 
                 }).ToList();
-            return studentsDto;
+            return serviceResponse;
         }
 
-        public StudentDto GetStudent(int id)
+        public ServiceResponse<StudentDto> GetStudent(int id)
         {
+            ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
             var student = _studentRepository.Get(id);
-            return new StudentDto()
+            serviceResponse.Data = new StudentDto()
             {
-                StudentId = student.StudentId,
+                StudentId = student.StudentId,   
                 FirstName = student.FirstName,
                 LastName = student.LastName,
                 GroupId = student.GroupId is null ? 0 : student.GroupId.Value
             };
+            return serviceResponse;
         }
 
-        public void UpdateStudent(StudentDto student)
+        public async Task<ServiceResponse<StudentDto>> UpdateStudentAsync(StudentDto student)
         {
-            var prevStudent = _studentRepository.GetAll().FirstOrDefault(s => s.StudentId == student.StudentId);
-            if (prevStudent != null)
+            ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
+            var prevStudent = await _studentRepository.GetAll().FirstOrDefaultAsync(s => s.StudentId == student.StudentId);
+            if (prevStudent == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Student not found";
+            }
+            else
             {
                 prevStudent.FirstName = student.FirstName;
-                prevStudent.LastName = student.LastName;
-                prevStudent.GroupId = student.GroupId;
-                _studentRepository.Update(prevStudent);
+                prevStudent.LastName = student.LastName;                
+                serviceResponse.Message = "Student updated";
+                serviceResponse.Data = student;
+                await _studentRepository.UpdateAsync(prevStudent);
             }
+            return serviceResponse;
         }
 
-        public StudentDto DeleteStudent(int id)
+        public async Task<ServiceResponse<StudentDto>> DeleteStudentAsync(int id)
         {
-            var student = _studentRepository.Get(id);
-            _studentRepository.Delete(id);
-            return new StudentDto()
+            ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
+            try
             {
-                StudentId = student.StudentId,
-                FirstName = student.FirstName,
-                LastName = student.LastName,
-                GroupId = student.GroupId is null ? 0 : student.GroupId.Value
-            };
-        }
+                var student = _studentRepository.Get(id);
+                if (student != null)
+                {
+                    await _studentRepository.DeleteAsync(id);
+                }
+                else
+                {
+                    serviceResponse.Message = "Student not found";
+                    serviceResponse.Success = false;
+                }
+            }
+            catch (Exception ex)
+            {
 
-        
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }        
     }
 }

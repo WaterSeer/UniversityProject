@@ -10,13 +10,13 @@ namespace UniversityProject.Services.Infrastructure.Interfaces
 {
     public interface IGroupService
     {
-        IEnumerable<GroupDto> GetGroups();
+        ServiceResponse<IEnumerable<GroupDto>> GetGroups();
 
-        GroupDto GetGroup(int id);
+        ServiceResponse<GroupDto> GetGroup(int id);
 
-        void UpdateGroup(GroupDto group);
+        Task<ServiceResponse<GroupDto>> UpdateGroupAsync(GroupDto group);
 
-        GroupDto DeleteGroup(int id);
+        Task<ServiceResponse<GroupDto>> DeleteGroupAsync(int id);
 
     }
 }

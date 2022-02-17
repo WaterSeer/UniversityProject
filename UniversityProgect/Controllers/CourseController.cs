@@ -15,28 +15,20 @@ namespace UniversityProgect.Controllers
         public CourseController(ICourseService service)
         {
             _service = service;
-        }
-
-        //public async Task<ViewResult> List()
-        //{
-        //    return View(new CourseListViewModel
-        //    {
-        //        Courses = _service.GetCoursesAsync().Result.Data
-        //    });
-        //}
+        }       
 
         public ViewResult List()
         {
             return View(new CourseListViewModel
             {
-                Courses = _service.GetCourses()
+                Courses = _service.GetCourses().Data
             });
         }
 
-        public async Task<ViewResult> Edit(int courseId)
+        public ViewResult Edit(int courseId)
         {
             //return  View(_service.GetCoursesAsync().Result.Data.FirstOrDefault(p => p.CourseId == courseId));
-            return View(_service.GetCourses().FirstOrDefault(p => p.CourseId == courseId));
+            return View(_service.GetCourses().Data.FirstOrDefault(p => p.CourseId == courseId));
         }
 
         [HttpPost]

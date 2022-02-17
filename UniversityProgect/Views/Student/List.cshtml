@@ -9,14 +9,22 @@
                 @student.LastName @student.FirstName                
             </h4>            
         </div>
+        
+        <form asp-action="Delete" method="post">
+            
+                <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-StudentId="@student.StudentId">Edit</a>
 
-         <form asp-action="Delete" method="post">
-            <a asp-controller="Student" asp-action="Edit" class="btn btn-sm btn-warning" asp-route-StudentId="@student.StudentId">Edit</a>
             <input type="hidden" name="StudentId" value="@student.StudentId"/>
+
             <button type="submit" class="btn btn-danger btn-sm">Delete</button>            
+        
+        
+        
         </form>
     </div>
-}
+
+
+    }
 
 <div page-model="@Model.PagingInfo" page-action="List" page-classes-enalbed="true" page-class="btn" page-class-normal="btn-secondary" page-class-selected="btn-primary"
 class="btn-group m-2"></div>

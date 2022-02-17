@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 using UniversityProject.Services.Infrastructure.Dtos;
@@ -17,53 +19,74 @@ namespace UniversityProject.Services.Infrastructure
         {
             _groupRepository = groupRepository;
         }
-        
-
-        public GroupDto DeleteGroup(int id)
+        public ServiceResponse<GroupDto> GetGroup(int id)
         {
+            ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
             var group = _groupRepository.Get(id);
-            _groupRepository.Delete(id);
-            return new GroupDto()
+            serviceResponse.Data = new GroupDto()
             {
                 GroupId = group.GroupId,
                 Name = group.Name,
                 CourseId = group.CourseId is null ? 0 : group.CourseId.Value
             };
+            return serviceResponse;
         }
 
-        public GroupDto GetGroup(int id)
+        public ServiceResponse<IEnumerable<GroupDto>> GetGroups()
         {
-            var group = _groupRepository.Get(id);
-            return new GroupDto()
-            {
-                GroupId = group.GroupId,
-                Name = group.Name,
-                CourseId = group.CourseId is null ? 0 : group.CourseId.Value
-            };
-        }
-
-        public IEnumerable<GroupDto> GetGroups()
-        {
+            ServiceResponse<IEnumerable<GroupDto>> serviceResponse = new ServiceResponse<IEnumerable<GroupDto>>();
             var groups = _groupRepository.GetAll();
-            var groupsDto = groups
+            serviceResponse.Data = groups
                 .Select(group => new GroupDto
                 {
                     GroupId = group.GroupId,
                     Name = group.Name,
                     CourseId = group.CourseId == null ? 0 : group.CourseId.Value
                 }).ToList();
-            return groupsDto;
-                
+            return serviceResponse;
         }
 
-        public void UpdateGroup(GroupDto group)
+        public async Task<ServiceResponse<GroupDto>> UpdateGroupAsync(GroupDto group)
         {
-             var prevGroup = _groupRepository.GetAll().FirstOrDefault(g => g.GroupId == group.GroupId);
-            if(prevGroup != null)
-            {                
-                prevGroup.Name = group.Name;                     
-                _groupRepository.Update(prevGroup);
+            ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
+            var prevGroup = await _groupRepository.GetAll().FirstOrDefaultAsync(g => g.GroupId == group.GroupId);
+            if (prevGroup == null)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = "Group not found";
             }
+            else
+            {
+                prevGroup.Name = group.Name;
+                serviceResponse.Message = "Group updated";
+                serviceResponse.Data = group;
+                await _groupRepository.UpdateAsync(prevGroup);
+            }
+            return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GroupDto>> DeleteGroupAsync(int id)
+        {
+            ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
+            try
+            {
+                var group = _groupRepository.Get(id);
+                if (group != null)
+                {
+                    await _groupRepository.DeleteAsync(id);
+                }
+                else
+                {
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = "Group not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
         }
     }
 }

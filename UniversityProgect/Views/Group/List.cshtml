@@ -9,11 +9,11 @@
                 Group @group.Name                
             </h4>
         </div> 
-        <form asp-action="Delete" method="post">
-            <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-GroupId="@group.GroupId">Edit</a>
-            <input type="hidden" name="GroupId" value="@group.GroupId"/>
-            <button type="submit" class="btn btn-danger btn-sm">Delete</button>            
-        </form>
+            <form asp-action="Delete" method="post">
+                <a asp-action="Edit" class="btn btn-sm btn-warning" asp-route-GroupId="@group.GroupId">Edit</a>
+                <input type="hidden" name="GroupId" value="@group.GroupId"/>
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>               
+            </form>
 
         <form id="@group.GroupId" asp-action="List" asp-controller="Student" asp-route-GroupId="@group.GroupId" method="post">
             <button type="submit" class="btn btn-success btn-sm" style="float:right">Select</button>

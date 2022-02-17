@@ -9,11 +9,11 @@ namespace UniversityProject.Domain.Interfaces
 
         T Get(int id);
 
-        Task<T> GetAsync(int id);
+        //Task<T> GetAsync(int id);
 
-        void Update(T entity);
+        Task<T> UpdateAsync(T entity);
 
-        T Delete(int id);
+        //T Delete(int id);
 
         Task<T> DeleteAsync(int id);
     }
