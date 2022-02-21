@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +48,7 @@ namespace UniversityProject.Services.Infrastructure
         public async Task<ServiceResponse<GroupDto>> UpdateGroupAsync(GroupDto group)
         {
             ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
-            var prevGroup = await _groupRepository.GetAll().FirstOrDefaultAsync(g => g.GroupId == group.GroupId);
+            var prevGroup = _groupRepository.GetAll().FirstOrDefault(g => g.GroupId == group.GroupId);
             if (prevGroup == null)
             {
                 serviceResponse.Success = false;
@@ -70,7 +69,7 @@ namespace UniversityProject.Services.Infrastructure
             ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
             try
             {
-                var group = _groupRepository.Get(id);
+                var group = _groupRepository.GetAll().FirstOrDefault(g => g.GroupId == id);
                 if (group != null)
                 {
                     await _groupRepository.DeleteAsync(id);

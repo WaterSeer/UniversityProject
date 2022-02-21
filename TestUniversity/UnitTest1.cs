@@ -10,6 +10,9 @@ using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
 using UniversityProject.Services.Infrastructure;
 using UniversityProject.Services.Infrastructure.Dtos;
+using MockQueryable.Moq;
+using MockQueryable.EntityFrameworkCore;
+using MockQueryable.Core;
 
 namespace TestUniversity
 {
@@ -42,6 +45,9 @@ namespace TestUniversity
                 _student,
                 new Student { StudentId = 3, FirstName = "John", LastName = "Archer", GroupId = 1 }
             }).AsQueryable());
+
+            
+
             _studentService = new StudentService(_studentMock.Object);
             _studentController = new StudentController(_studentService, _groupService)
             {
@@ -101,19 +107,18 @@ namespace TestUniversity
         }
 
         [Test]
-        public async void CanSaveStudentValidChanges()
+        public async Task CanSaveStudentValidChanges()
         {
-            Student student = new Student()
+            StudentDto student = new StudentDto()
             {
                 StudentId = 1,
-                GroupId = 1,
                 FirstName = "Todd",
                 LastName = "Smith"
             };
-            IActionResult result = _studentController.Edit((int)student.StudentId);
-            _studentMock.Verify( m =>  m.UpdateAsync(student));
+            IActionResult result = await Task.FromResult<IActionResult>(await _studentController.Edit(student));
+            _studentMock.Verify(m =>  m.UpdateAsync(It.IsAny<Student>()));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
-            Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
+            Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);                   
         }
 
         [Test]
@@ -130,15 +135,14 @@ namespace TestUniversity
             IActionResult result = _studentController.Edit((int)student.StudentId);
             _studentMock.Verify(m => m.UpdateAsync(It.IsAny<Student>()), Times.Never());
             Assert.IsInstanceOf<ViewResult>(result);
-        }
+        }       
 
         [Test]
         public async Task CanDeleteValidStudent()
         {
-            await _studentController.DeleteStudent(2);
+            IActionResult result = await Task.FromResult<IActionResult>(await _studentController.DeleteStudent(2));
             _studentMock.Verify(s => s.DeleteAsync((int)_student.StudentId));
-        }
-
+        }                 
 
         /// <summary>
         /// CourseController
@@ -148,14 +152,14 @@ namespace TestUniversity
         [Test]
         public async Task CanSaveCourseValidChanges()
         {
-            Course course = new Course()
+            CourseDto course = new CourseDto()
             {
                 CourseId = 1,
                 Name = "Course1",
                 Description = "Description",
             };
-            IActionResult result = _courseController.Edit((int)course.CourseId);
-            _courseMock.Verify(m => m.UpdateAsync(course));
+            IActionResult result = await Task.FromResult<IActionResult>(await _courseController.Edit(course));
+            _courseMock.Verify(m => m.UpdateAsync(It.IsAny<Course>()));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
         }
@@ -178,7 +182,7 @@ namespace TestUniversity
         [Test]
         public async Task CanDeleteValidCourse()
         {
-            await _courseController.DeleteCourse(2);
+            IActionResult result = await Task.FromResult<IActionResult>(await _courseController.DeleteCourse(2));
             _courseMock.Verify(s => s.DeleteAsync((int)_course.CourseId));
         }
 
@@ -195,15 +199,15 @@ namespace TestUniversity
         }
 
         [Test]
-        public void CanSaveGroupValidChanges()
+        public async Task CanSaveGroupValidChanges()
         {
-            Group group = new Group()
+            GroupDto group = new GroupDto()
             {
                 GroupId = 1,
                 Name = "Group1",
             };
-            IActionResult result = _groupController.Edit((int)group.GroupId);
-            _groupMock.Verify(m => m.UpdateAsync(group));
+            IActionResult result = await Task.FromResult<IActionResult>(await _groupController.Edit(group));
+            _groupMock.Verify(m => m.UpdateAsync(It.IsAny<Group>()));
             Assert.IsInstanceOf<RedirectToActionResult>(result);
             Assert.AreEqual("List", (result as RedirectToActionResult).ActionName);
         }
@@ -222,9 +226,9 @@ namespace TestUniversity
         }
 
         [Test]
-        public void CanDeleteValidGroup()
+        public async Task CanDeleteValidGroup()
         {
-            _groupController.DeleteGroup(3);
+            IActionResult result = await Task.FromResult<IActionResult>(await _groupController.DeleteGroup(3));
             _groupMock.Verify(s => s.DeleteAsync((int)_groupForDelete.GroupId));
         }
     }

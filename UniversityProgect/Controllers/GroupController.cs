@@ -65,7 +65,7 @@ namespace UniversityProgect.Controllers
             }
 
             var deleteGroup = await _groupService.DeleteGroupAsync(groupId);
-            if (deleteGroup != null)
+            if (deleteGroup.Data != null)
             {
                 TempData["message"] = $"{deleteGroup.Data.Name} has deleted";
             }

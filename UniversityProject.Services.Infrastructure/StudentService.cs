@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +53,7 @@ namespace UniversityProject.Services.Infrastructure
             var student = _studentRepository.Get(id);
             serviceResponse.Data = new StudentDto()
             {
-                StudentId = student.StudentId,   
+                StudentId = student.StudentId,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
                 GroupId = student.GroupId is null ? 0 : student.GroupId.Value
@@ -65,7 +64,7 @@ namespace UniversityProject.Services.Infrastructure
         public async Task<ServiceResponse<StudentDto>> UpdateStudentAsync(StudentDto student)
         {
             ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
-            var prevStudent = await _studentRepository.GetAll().FirstOrDefaultAsync(s => s.StudentId == student.StudentId);
+            var prevStudent = _studentRepository.GetAll().FirstOrDefault(s => s.StudentId == student.StudentId);
             if (prevStudent == null)
             {
                 serviceResponse.Success = false;
@@ -74,7 +73,7 @@ namespace UniversityProject.Services.Infrastructure
             else
             {
                 prevStudent.FirstName = student.FirstName;
-                prevStudent.LastName = student.LastName;                
+                prevStudent.LastName = student.LastName;
                 serviceResponse.Message = "Student updated";
                 serviceResponse.Data = student;
                 await _studentRepository.UpdateAsync(prevStudent);
@@ -87,7 +86,7 @@ namespace UniversityProject.Services.Infrastructure
             ServiceResponse<StudentDto> serviceResponse = new ServiceResponse<StudentDto>();
             try
             {
-                var student = _studentRepository.Get(id);
+                var student = _studentRepository.GetAll().FirstOrDefault(s => (int)s.StudentId == id);
                 if (student != null)
                 {
                     await _studentRepository.DeleteAsync(id);
@@ -105,6 +104,6 @@ namespace UniversityProject.Services.Infrastructure
                 serviceResponse.Message = ex.Message;
             }
             return serviceResponse;
-        }        
+        }
     }
 }

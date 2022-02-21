@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +47,7 @@ namespace UniversityProject.Services.Infrastructure
         public async Task<ServiceResponse<CourseDto>> UpdateCourseAsync(CourseDto course)
         {
             ServiceResponse<CourseDto> serviceResponse = new ServiceResponse<CourseDto>();
-            var prevCourse = await _courseRepository.GetAll().FirstOrDefaultAsync(c => c.CourseId == course.CourseId);
+            var prevCourse = _courseRepository.GetAll().FirstOrDefault(c => c.CourseId == course.CourseId);
             if (prevCourse == null)
             {
                 serviceResponse.Success = false;
@@ -70,7 +69,7 @@ namespace UniversityProject.Services.Infrastructure
             ServiceResponse<CourseDto> serviceResponse = new ServiceResponse<CourseDto>();
             try
             {
-                var course = _courseRepository.Get(id);
+                var course = _courseRepository.GetAll().FirstOrDefault(c => (int)c.CourseId == id);
                 if (course != null)
                 {
                     await _courseRepository.DeleteAsync(id);

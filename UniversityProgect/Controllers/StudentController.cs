@@ -53,7 +53,7 @@ namespace UniversityProgect.Controllers
                 },
                 CurrentCategory = category
             };
-            var b =  View(new StudentsListViewModel
+            var b = View(new StudentsListViewModel
             {
                 Students = _service.GetStudents().Data
                 .Where(p => category == null || groupCategory == category)

@@ -25,7 +25,7 @@ namespace UniversityProject.Infrastucture.Data
             if (dbEntry != null)
             {
                 _context.Students.Remove(dbEntry.Result);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             return await dbEntry;
         }
