@@ -2,6 +2,7 @@
 
 Three-tier Onion-architecture: Core layer, Data layer, Service layer.
 
-SQLite database. 
+[![.NET](https://github.com/WaterSeer/UniversityProject/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/WaterSeer/UniversityProject/actions/workflows/dotnet.yml)
 
+SQLite database.  
 Tests included. 
