@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
+using UniversityProject.Infrastucture.Data;
 using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
@@ -13,11 +15,14 @@ namespace UniversityProject.Services.Infrastructure
     {
 
         private readonly IRepository<Group> _groupRepository;
+        private readonly ILogger<GroupService> _logger;
 
-        public GroupService(IRepository<Group> groupRepository)
+        public GroupService(IRepository<Group> groupRepository, ILogger<GroupService> logger)
         {
-            _groupRepository = groupRepository;
+            _groupRepository = groupRepository ?? throw new ArgumentNullException(nameof(groupRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public ServiceResponse<GroupDto> GetGroup(int id)
         {
             ServiceResponse<GroupDto> serviceResponse = new ServiceResponse<GroupDto>();
@@ -84,6 +89,7 @@ namespace UniversityProject.Services.Infrastructure
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
+                _logger.LogError(ex, "Delete group error # {0}: {ExceptionMessage}", ex.Message, id);
             }
             return serviceResponse;
         }

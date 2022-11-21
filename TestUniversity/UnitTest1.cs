@@ -13,6 +13,9 @@ using UniversityProject.Services.Infrastructure.Dtos;
 using MockQueryable.Moq;
 using MockQueryable.EntityFrameworkCore;
 using MockQueryable.Core;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
+using UniversityProject.Services.Infrastructure.Interfaces;
 
 namespace TestUniversity
 {
@@ -24,7 +27,7 @@ namespace TestUniversity
         Mock<IRepository<Student>> _studentMock;
         Mock<IRepository<Course>> _courseMock;
         Mock<IRepository<Group>> _groupMock;
-        Mock<ITempDataDictionary> _tempDataMock;
+        Mock<ITempDataDictionary> _tempDataMock;        
         CourseService _courseService;
         GroupService _groupService;
         StudentService _studentService;
@@ -35,8 +38,13 @@ namespace TestUniversity
         [SetUp]
         public void SetUp()
         {
-            _tempDataMock = new Mock<ITempDataDictionary>();
-
+            _tempDataMock = new Mock<ITempDataDictionary>();            
+            var _loggerStudent = Mock.Of<ILogger<StudentController>>();
+            var _loggerGroup = Mock.Of<ILogger<GroupController>>();
+            var _loggerCourse = Mock.Of<ILogger<CourseController>>();
+            var _loggerStudentService = Mock.Of<ILogger<StudentService>>();
+            var _loggerGroupService = Mock.Of<ILogger<GroupService>>();
+            var _loggerCourseService = Mock.Of<ILogger<CourseService>>();
             _studentMock = new Mock<IRepository<Student>>();
             _student = new Student { StudentId = 2, FirstName = "Sara", LastName = "Dower", GroupId = 2 };
             _studentMock.Setup(m => m.GetAll()).Returns((new Student[]
@@ -48,8 +56,8 @@ namespace TestUniversity
 
             
 
-            _studentService = new StudentService(_studentMock.Object);
-            _studentController = new StudentController(_studentService, _groupService)
+            _studentService = new StudentService(_studentMock.Object, _loggerStudentService);
+            _studentController = new StudentController(_studentService, _groupService, _loggerStudent)
             {
                 TempData = _tempDataMock.Object
             };
@@ -61,8 +69,8 @@ namespace TestUniversity
                 _course,
                 new Course { CourseId = 3, Name = "course3", Description = "CCDescription" }
             }).AsQueryable());
-            _courseService = new CourseService(_courseMock.Object);
-            _courseController = new CourseController(_courseService)
+            _courseService = new CourseService(_courseMock.Object, _loggerCourseService);
+            _courseController = new CourseController(_courseService, _loggerCourse)
             {
                TempData = _tempDataMock.Object
             };
@@ -75,8 +83,8 @@ namespace TestUniversity
                 _groupForDelete,
                 new Group{GroupId = 2, Name = "group3", CourseId = 1}
             }).AsQueryable());
-            _groupService = new GroupService(_groupMock.Object);
-            _groupController = new GroupController(_groupService, _studentService)
+            _groupService = new GroupService(_groupMock.Object, _loggerGroupService);
+            _groupController = new GroupController(_groupService, _studentService, _loggerGroup)
             {
                 TempData = _tempDataMock.Object
             };

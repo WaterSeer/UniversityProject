@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,11 +14,14 @@ namespace UniversityProject.Services.Infrastructure
     public class CourseService : ICourseService
     {
         private readonly IRepository<Course> _courseRepository;
+        private readonly ILogger<CourseService> _logger;
 
-        public CourseService(IRepository<Course> courseRepository)
+        public CourseService(IRepository<Course> courseRepository, ILogger<CourseService> logger)
         {
-            _courseRepository = courseRepository;
+            _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public ServiceResponse<CourseDto> GetCourse(int id)
         {
             ServiceResponse<CourseDto> serviceResponse = new ServiceResponse<CourseDto>();
@@ -84,6 +89,7 @@ namespace UniversityProject.Services.Infrastructure
             {
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
+                _logger.LogError(ex, "Delete course error # {0}: {ExceptionMessage}", ex.Message, id);
             }
             return serviceResponse;
         }

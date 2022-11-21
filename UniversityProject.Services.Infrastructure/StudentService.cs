@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProject.Domain.Core;
 using UniversityProject.Domain.Interfaces;
+using UniversityProject.Infrastucture.Data;
 using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
@@ -12,10 +14,12 @@ namespace UniversityProject.Services.Infrastructure
     public class StudentService : IStudentService
     {
         private readonly IRepository<Student> _studentRepository;
+        private readonly ILogger<StudentService> _logger;
 
-        public StudentService(IRepository<Student> studentRepository)
+        public StudentService(IRepository<Student> studentRepository, ILogger<StudentService> logger)
         {
-            _studentRepository = studentRepository;
+            _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private ServiceResponse<StudentDto> Get(Student student)
@@ -102,6 +106,7 @@ namespace UniversityProject.Services.Infrastructure
 
                 serviceResponse.Success = false;
                 serviceResponse.Message = ex.Message;
+                _logger.LogError(ex, "Delete student error # {0}: {ExceptionMessage}", ex.Message, id);
             }
             return serviceResponse;
         }

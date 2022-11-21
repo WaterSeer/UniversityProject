@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProgect.Models.ViewModels;
+using UniversityProject.Domain.Core;
 using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
@@ -9,14 +11,15 @@ namespace UniversityProgect.Controllers
 {
     public class GroupController : Controller
     {
-        private IGroupService _groupService;
+        private readonly IGroupService _groupService;
+        private readonly IStudentService _studentService;
+        private readonly ILogger<GroupController> _logger;
 
-        private IStudentService _studentService;
-
-        public GroupController(IGroupService groupService, IStudentService studentService)
+        public GroupController(IGroupService groupService, IStudentService studentService, ILogger<GroupController> logger)
         {
             _groupService = groupService;
             _studentService = studentService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -49,6 +52,7 @@ namespace UniversityProgect.Controllers
             {
                 await _groupService.UpdateGroupAsync(group);
                 TempData["message"] = $"{group.Name} has been saved";
+                _logger.LogInformation("{0} has been edited.", group.Name);
                 return RedirectToAction("List");
             }
             else
@@ -61,6 +65,7 @@ namespace UniversityProgect.Controllers
             if (_studentService.GetStudents().Data.FirstOrDefault(s => s.GroupId == groupId) != null)
             {
                 TempData["message"] = $"This group cannot be deleted";
+                _logger.LogWarning("Trying to delete group # {0}", groupId);
                 return RedirectToAction("List");
             }
 
@@ -68,6 +73,7 @@ namespace UniversityProgect.Controllers
             if (deleteGroup.Data != null)
             {
                 TempData["message"] = $"{deleteGroup.Data.Name} has deleted";
+                _logger.LogInformation("{0} has been deleted.", deleteGroup.Data.Name);
             }
             return RedirectToAction("List");
         }

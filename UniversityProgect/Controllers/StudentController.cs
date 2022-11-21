@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 using UniversityProgect.Models.ViewModels;
+using UniversityProject.Domain.Core;
 using UniversityProject.Services.Infrastructure.Dtos;
 using UniversityProject.Services.Infrastructure.Interfaces;
 
@@ -9,14 +11,16 @@ namespace UniversityProgect.Controllers
 {
     public class StudentController : Controller
     {
-        private IStudentService _service;
-        private IGroupService _groupService;
+        private readonly IStudentService _service;
+        private readonly IGroupService _groupService;
+        private readonly ILogger<StudentController> _logger;
         public int PageSize = 10;
 
-        public StudentController(IStudentService servise, IGroupService groupService)
+        public StudentController(IStudentService service, IGroupService groupService, ILogger<StudentController> logger)
         {
-            _service = servise;
+            _service = service;
             _groupService = groupService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -82,6 +86,7 @@ namespace UniversityProgect.Controllers
             {
                 await _service.UpdateStudentAsync(student);
                 TempData["message"] = $"{student.FirstName} {student.LastName} has been saved";
+                _logger.LogInformation("{0} has been edited.", student.LastName);
                 return RedirectToAction("List");
             }
             else
@@ -95,6 +100,7 @@ namespace UniversityProgect.Controllers
             if (deleteStudent.Data != null)
             {
                 TempData["message"] = $"{deleteStudent.Data.FirstName} {deleteStudent.Data.LastName} was deleted";
+                _logger.LogInformation("{0} has been deleted.", deleteStudent.Data.LastName);
             }
             return RedirectToAction("List");
         }
